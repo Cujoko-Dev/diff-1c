@@ -88,7 +88,16 @@ def main():
         raise Exception('Не удалось разобрать файл {}'.format(str(file2)))  # fixme
 
     kdiff3 = Path(get_setting('General', 'KDiff3'))
-    exit_code = subprocess.check_call([str(kdiff3), str(file1_source_folder), str(file2_source_folder)])
+    kdiff3_args = [
+        str(kdiff3),
+        str(file1_source_folder),
+        str(file2_source_folder),
+        "--cs",
+        "EncodingForA=windows-1251",
+        "--cs",
+        "EncodingForB=windows-1251"
+    ]
+    exit_code = subprocess.check_call(kdiff3_args)
     if not exit_code == 0:
         raise Exception('Не удалось сравнить файлы {} и {}'.format(str(file1), str(file2)))  # fixme
 
