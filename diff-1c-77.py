@@ -21,15 +21,20 @@ def get_setting(section, key):
     config = RawConfigParser()
     config.optionxform = lambda option: option
     config.read(str(settings_config_file_path_rel), 'utf-8')
-    return config[section][key]
+    return config[section][key]  # fixme
 
 
 def main():
     argparser = ArgumentParser()
-    argparser.add_argument('-v', '--version', action='version', version='%(prog)s {}'.format(__version__))
-    argparser.add_argument('file1')
-    argparser.add_argument('file2')
-    argparser.add_argument('--debug', action='store_true', default=False)
+    argparser.add_argument('-v', '--version', action='version', version='%(prog)s, ver. {}'.format(__version__))
+    argparser.add_argument('--debug', action='store_true', default=False, help='if this option exists '
+                                                                               'then debug mode is enabled')
+    argparser.add_argument('--tool', choices=['KDiff3', 'AraxisMerge', 'WinMerge', 'ExamDiff'], default='KDiff3',
+                           help='external diff program')
+    argparser.add_argument('--bname', help='the window title for the base file')
+    argparser.add_argument('--yname', help='the window title for your file')
+    argparser.add_argument('base', help='the original file without your changes')
+    argparser.add_argument('mine', help='your own file, with your changes')
     args = argparser.parse_args()
 
     if args.debug:
@@ -42,64 +47,129 @@ def main():
     gcomp = Path(get_setting('General', 'GComp'))
 
     # file1
-    file1 = Path(args.file1)
-    file1_temp = Path(tempfile.mktemp(file1.suffix))
-    shutil.copyfile(str(file1), str(file1_temp))
+    base_path = Path(args.base)
+    base_temp_path = Path(tempfile.mktemp(base_path.suffix))
+    shutil.copyfile(str(base_path), str(base_temp_path))
 
-    file1_source_folder = Path(tempfile.mktemp())
-    if not file1_source_folder.exists():
-        file1_source_folder.mkdir(parents=True)
+    base_source_path = Path(tempfile.mktemp())
+    if not base_source_path.exists():
+        base_source_path.mkdir(parents=True)
     else:
-        shutil.rmtree(str(file1_source_folder), ignore_errors=True)  # fixme
+        shutil.rmtree(str(base_source_path), ignore_errors=True)  # fixme
 
-    file1_bat_file = Path(tempfile.mktemp('.bat'))
-    with file1_bat_file.open('w', encoding='cp866') as file1_bat_file_temp:
-        file1_bat_file_temp.write('@echo off\n')
-        file1_bat_file_temp.write('"{}" -d -F "{}" -DD "{}"'.format(  # fixme
+    base_bat_path = Path(tempfile.mktemp('.bat'))
+    with base_bat_path.open('w', encoding='cp866') as base_bat:
+        base_bat.write('@echo off\n')
+        base_bat.write('"{}" -d -F "{}" -DD "{}"'.format(  # fixme
             str(gcomp),
-            str(file1_temp),
-            str(file1_source_folder)
+            str(base_temp_path),
+            str(base_source_path)
         ))
-    exit_code = subprocess.check_call(['cmd.exe', '/C', str(file1_bat_file)])  # fixme
+    exit_code = subprocess.check_call(['cmd.exe', '/C', str(base_bat_path)])  # fixme
     if not exit_code == 0:
-        raise Exception('Не удалось разобрать файл {}'.format(str(file1)))  # fixme
+        raise Exception('Не удалось разобрать файл {}'.format(str(base_path)))  # fixme
 
     # file2
-    file2 = Path(args.file2)
-    file2_temp = Path(tempfile.mktemp(file2.suffix))
-    shutil.copyfile(str(file2), str(file2_temp))
+    mine_path = Path(args.mine)
+    mine_temp_path = Path(tempfile.mktemp(mine_path.suffix))
+    shutil.copyfile(str(mine_path), str(mine_temp_path))
 
-    file2_source_folder = Path(tempfile.mktemp())
-    if not file2_source_folder.exists():
-        file2_source_folder.mkdir(parents=True)
+    mine_source_path = Path(tempfile.mktemp())
+    if not mine_source_path.exists():
+        mine_source_path.mkdir(parents=True)
     else:
-        shutil.rmtree(str(file2_source_folder), ignore_errors=True)  # fixme
+        shutil.rmtree(str(mine_source_path), ignore_errors=True)  # fixme
 
-    file2_bat_file = Path(tempfile.mktemp('.bat'))
-    with file2_bat_file.open('w', encoding='cp866') as file2_bat_file_temp:
-        file2_bat_file_temp.write('@echo off\n')
-        file2_bat_file_temp.write('"{}" -d -F "{}" -DD "{}"'.format(  # fixme
+    mine_bat_path = Path(tempfile.mktemp('.bat'))
+    with mine_bat_path.open('w', encoding='cp866') as mine_bat:
+        mine_bat.write('@echo off\n')
+        mine_bat.write('"{}" -d -F "{}" -DD "{}"'.format(  # fixme
             str(gcomp),
-            str(file2_temp),
-            str(file2_source_folder)
+            str(mine_temp_path),
+            str(mine_source_path)
         ))
-    exit_code = subprocess.check_call(['cmd.exe', '/C', str(file2_bat_file)])  # fixme
+    exit_code = subprocess.check_call(['cmd.exe', '/C', str(mine_bat_path)])  # fixme
     if not exit_code == 0:
-        raise Exception('Не удалось разобрать файл {}'.format(str(file2)))  # fixme
+        raise Exception('Не удалось разобрать файл {}'.format(str(mine_path)))  # fixme
 
-    kdiff3 = Path(get_setting('General', 'KDiff3'))
-    kdiff3_args = [
-        str(kdiff3),
-        str(file1_source_folder),
-        str(file2_source_folder),
-        "--cs",
-        "EncodingForA=windows-1251",
-        "--cs",
-        "EncodingForB=windows-1251"
-    ]
-    exit_code = subprocess.check_call(kdiff3_args)
+    tool_args = None
+    if args.tool == 'KDiff3':
+        tool_path = Path(get_setting('General', 'KDiff3'))
+        tool_args = [
+            str(tool_path),
+            '--cs',
+            'EncodingForA=windows-1251',
+            '--cs',
+            'EncodingForB=windows-1251',
+            str(base_source_path),
+            str(mine_source_path)
+        ]
+        if args.bname is not None:
+            tool_args += [
+                '--L1',
+                args.bname
+            ]
+        if args.yname is not None:
+            tool_args += [
+                '--L2',
+                args.yname
+            ]
+    elif args.tool == 'AraxisMerge':
+        tool_path = Path(get_setting('General', 'AraxisMerge'))
+        tool_args = [
+            str(tool_path),
+            '/max',
+            '/wait',
+            str(base_source_path),
+            str(mine_source_path)
+        ]
+        if args.bname is not None:
+            tool_args += [
+                '/title1:{}'.format(args.bname)
+            ]
+        if args.yname is not None:
+            tool_args += [
+                '/title2:{}'.format(args.yname)
+            ]
+    elif args.tool == 'WinMerge':
+        tool_path = Path(get_setting('General', 'WinMerge'))
+        tool_args = [
+            str(tool_path),
+            '-e',
+            '-ub',
+            str(base_source_path),
+            str(mine_source_path)
+        ]
+        if args.bname is not None:
+            tool_args += [
+                '-dl',
+                args.bname
+            ]
+        if args.yname is not None:
+            tool_args += [
+                '-dr',
+                args.yname
+            ]
+    elif args.tool == 'ExamDiff':
+        tool_path = Path(get_setting('General', 'ExamDiff'))
+        tool_args = [
+            str(tool_path),
+            str(base_source_path),
+            str(mine_source_path)
+        ]
+        if args.bname is not None:
+            tool_args += [
+                '--left_display_name:{}'.format(args.bname)
+            ]
+        if args.yname is not None:
+            tool_args += [
+                '--right_display_name:{}'.format(args.yname)
+            ]
+    if tool_args == None:
+        raise Exception('Не удалось сравнить файлы {} и {}'.format(str(base_path), str(mine_path)))  # fixme
+    exit_code = subprocess.check_call(tool_args)
     if not exit_code == 0:
-        raise Exception('Не удалось сравнить файлы {} и {}'.format(str(file1), str(file2)))  # fixme
+        raise Exception('Не удалось сравнить файлы {} и {}'.format(str(base_path), str(mine_path)))  # fixme
 
 
 if __name__ == '__main__':
