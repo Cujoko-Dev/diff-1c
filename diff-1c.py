@@ -91,6 +91,8 @@ def main():
     exit_code = subprocess.check_call(['cmd.exe', '/C', str(base_bat_path)])
     if not exit_code == 0:
         raise Exception('Не удалось разобрать файл {}'.format(str(base_path)))
+    base_temp_path.unlink()
+    base_bat_path.unlink()
 
     # mine
     mine_path = Path(args.mine)
@@ -126,6 +128,8 @@ def main():
     exit_code = subprocess.check_call(['cmd.exe', '/C', str(mine_bat_path)])
     if not exit_code == 0:
         raise Exception('Не удалось разобрать файл {}'.format(str(mine_path)))
+    mine_temp_path.unlink()
+    mine_bat_path.unlink()
 
     tool_args = None
     if args.tool == 'KDiff3':
