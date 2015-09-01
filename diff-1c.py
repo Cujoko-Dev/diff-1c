@@ -13,7 +13,7 @@ __version__ = '1.0.0'
 
 
 def get_setting(section, key):
-    settings_config_file_path_rel = Path('diff-1c-77.ini')
+    settings_config_file_path_rel = Path('diff-1c.ini')
     if not settings_config_file_path_rel.exists():
         settings_config_file_path_rel = Path(__file__).parent / settings_config_file_path_rel
         if not settings_config_file_path_rel.exists():
