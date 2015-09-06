@@ -68,12 +68,11 @@ def main():
     else:
         shutil.rmtree(str(base_source_path), ignore_errors=True)
 
-    base_bat_path = Path(tempfile.mktemp('.bat'))
-    with base_bat_path.open('w', encoding='cp866') as base_bat:
-        base_bat.write('@echo off\n')
+    with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat') as base_bat_file:
+        base_bat_file.write('@echo off\n')
         base_path_suffix_lower = base_path.suffix.lower()
         if base_path_suffix_lower in ['.epf', '.erf']:
-            base_bat.write('"{}" /F"{}" /DisableStartupMessages /Execute"{}" {}'.format(
+            base_bat_file.write('"{}" /F"{}" /DisableStartupMessages /Execute"{}" {}'.format(
                 str(exe1c),
                 str(ib),
                 str(v8_reader),
@@ -83,16 +82,15 @@ def main():
                 )
             ))
         elif base_path_suffix_lower in ['.ert', '.md']:
-            base_bat.write('"{}" -d -F "{}" -DD "{}"'.format(
+            base_bat_file.write('"{}" -d -F "{}" -DD "{}"'.format(
                 str(gcomp),
                 str(base_temp_path),
                 str(base_source_path)
             ))
-    exit_code = subprocess.check_call(['cmd.exe', '/C', str(base_bat_path)])
-    if not exit_code == 0:
-        raise Exception('Не удалось разобрать файл {}'.format(str(base_path)))
-    base_temp_path.unlink()
-    base_bat_path.unlink()
+        exit_code = subprocess.check_call(['cmd.exe', '/C', str(base_bat_file.name)])
+        if not exit_code == 0:
+            raise Exception('Не удалось разобрать файл {}'.format(str(base_path)))
+        base_temp_path.unlink()
 
     # mine
     mine_path = Path(args.mine)
@@ -105,12 +103,11 @@ def main():
     else:
         shutil.rmtree(str(mine_source_path), ignore_errors=True)
 
-    mine_bat_path = Path(tempfile.mktemp('.bat'))
-    with mine_bat_path.open('w', encoding='cp866') as mine_bat:
-        mine_bat.write('@echo off\n')
+    with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat') as mine_bat_file:
+        mine_bat_file.write('@echo off\n')
         mine_path_suffix_lower = base_path.suffix.lower()
         if mine_path_suffix_lower in ['.epf', '.erf']:
-            mine_bat.write('"{}" /F"{}" /DisableStartupMessages /Execute"{}" {}'.format(
+            mine_bat_file.write('"{}" /F"{}" /DisableStartupMessages /Execute"{}" {}'.format(
                 str(exe1c),
                 str(ib),
                 str(v8_reader),
@@ -120,16 +117,15 @@ def main():
                 )
             ))
         elif mine_path_suffix_lower in ['.ert', '.md']:
-            mine_bat.write('"{}" -d -F "{}" -DD "{}"'.format(
+            mine_bat_file.write('"{}" -d -F "{}" -DD "{}"'.format(
                 str(gcomp),
                 str(mine_temp_path),
                 str(mine_source_path)
             ))
-    exit_code = subprocess.check_call(['cmd.exe', '/C', str(mine_bat_path)])
-    if not exit_code == 0:
-        raise Exception('Не удалось разобрать файл {}'.format(str(mine_path)))
-    mine_temp_path.unlink()
-    mine_bat_path.unlink()
+        exit_code = subprocess.check_call(['cmd.exe', '/C', str(mine_bat_file.name)])
+        if not exit_code == 0:
+            raise Exception('Не удалось разобрать файл {}'.format(str(mine_path)))
+        mine_temp_path.unlink()
 
     tool_args = None
     if args.tool == 'KDiff3':
