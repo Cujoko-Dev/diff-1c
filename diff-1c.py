@@ -204,7 +204,7 @@ def main():
             tool_args += [
                 '--right_display_name:{}'.format(args.yname)
             ]
-    if tool_args == None:
+    if tool_args is None:
         raise Exception('Не удалось сравнить файлы {} и {}'.format(str(base_path), str(mine_path)))
     exit_code = subprocess.check_call(tool_args)
     if not exit_code == 0:
