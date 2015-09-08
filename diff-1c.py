@@ -68,7 +68,7 @@ def main():
     else:
         shutil.rmtree(str(base_source_path), ignore_errors=True)
 
-    with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat') as base_bat_file:
+    with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat', delete=False) as base_bat_file:
         base_bat_file.write('@echo off\n')
         base_path_suffix_lower = base_path.suffix.lower()
         if base_path_suffix_lower in ['.epf', '.erf']:
@@ -87,10 +87,11 @@ def main():
                 str(base_temp_path),
                 str(base_source_path)
             ))
-        exit_code = subprocess.check_call(['cmd.exe', '/C', str(base_bat_file.name)])
-        if not exit_code == 0:
-            raise Exception('Не удалось разобрать файл {}'.format(str(base_path)))
-        base_temp_path.unlink()
+    exit_code = subprocess.check_call(['cmd.exe', '/C', str(base_bat_file.name)])
+    if not exit_code == 0:
+        raise Exception('Не удалось разобрать файл {}'.format(str(base_path)))
+    Path(base_bat_file.name).unlink()
+    base_temp_path.unlink()
 
     # mine
     mine_path = Path(args.mine)
@@ -103,7 +104,7 @@ def main():
     else:
         shutil.rmtree(str(mine_source_path), ignore_errors=True)
 
-    with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat') as mine_bat_file:
+    with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat', delete=False) as mine_bat_file:
         mine_bat_file.write('@echo off\n')
         mine_path_suffix_lower = base_path.suffix.lower()
         if mine_path_suffix_lower in ['.epf', '.erf']:
@@ -122,10 +123,11 @@ def main():
                 str(mine_temp_path),
                 str(mine_source_path)
             ))
-        exit_code = subprocess.check_call(['cmd.exe', '/C', str(mine_bat_file.name)])
-        if not exit_code == 0:
-            raise Exception('Не удалось разобрать файл {}'.format(str(mine_path)))
-        mine_temp_path.unlink()
+    exit_code = subprocess.check_call(['cmd.exe', '/C', str(mine_bat_file.name)])
+    if not exit_code == 0:
+        raise Exception('Не удалось разобрать файл {}'.format(str(mine_path)))
+    Path(mine_bat_file.name).unlink()
+    mine_temp_path.unlink()
 
     tool_args = None
     if args.tool == 'KDiff3':
