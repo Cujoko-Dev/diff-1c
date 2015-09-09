@@ -44,8 +44,8 @@ def main():
         import pydevd
         pydevd.settrace(port=10050)
 
-    exe1c = Path(get_setting('General', '1C'))
-    if not exe1c.exists():
+    exe_1c = Path(get_setting('General', '1C'))
+    if not exe_1c.exists():
         raise Exception('Платформа не существует!')
     ib = Path(get_setting('General', 'IB'))
     if not ib.exists():
@@ -70,10 +70,10 @@ def main():
 
     with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat', delete=False) as base_bat_file:
         base_bat_file.write('@echo off\n')
-        base_path_suffix_lower = base_path.suffix.lower()
-        if base_path_suffix_lower in ['.epf', '.erf']:
+        base_temp_path_suffix_lower = base_temp_path.suffix.lower()
+        if base_temp_path_suffix_lower in ['.epf', '.erf']:
             base_bat_file.write('"{}" /F"{}" /DisableStartupMessages /Execute"{}" {}'.format(
-                str(exe1c),
+                str(exe_1c),
                 str(ib),
                 str(v8_reader),
                 '/C"decompile;pathtocf;{};pathout;{};shutdown;convert-mxl2txt;"'.format(
@@ -81,7 +81,7 @@ def main():
                     str(base_source_path)
                 )
             ))
-        elif base_path_suffix_lower in ['.ert', '.md']:
+        elif base_temp_path_suffix_lower in ['.ert', '.md']:
             base_bat_file.write('"{}" -d -F "{}" -DD "{}"'.format(
                 str(gcomp),
                 str(base_temp_path),
@@ -106,10 +106,10 @@ def main():
 
     with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat', delete=False) as mine_bat_file:
         mine_bat_file.write('@echo off\n')
-        mine_path_suffix_lower = base_path.suffix.lower()
-        if mine_path_suffix_lower in ['.epf', '.erf']:
+        mine_temp_path_suffix_lower = mine_temp_path.suffix.lower()
+        if mine_temp_path_suffix_lower in ['.epf', '.erf']:
             mine_bat_file.write('"{}" /F"{}" /DisableStartupMessages /Execute"{}" {}'.format(
-                str(exe1c),
+                str(exe_1c),
                 str(ib),
                 str(v8_reader),
                 '/C"decompile;pathtocf;{};pathout;{};shutdown;convert-mxl2txt;"'.format(
@@ -117,7 +117,7 @@ def main():
                     str(mine_source_path)
                 )
             ))
-        elif mine_path_suffix_lower in ['.ert', '.md']:
+        elif mine_temp_path_suffix_lower in ['.ert', '.md']:
             mine_bat_file.write('"{}" -d -F "{}" -DD "{}"'.format(
                 str(gcomp),
                 str(mine_temp_path),
