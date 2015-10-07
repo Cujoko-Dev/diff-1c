@@ -1,7 +1,8 @@
-#!/usr/bin/env python
+#! python3
 # -*- coding: utf-8 -*-
 from argparse import ArgumentParser
 from configparser import RawConfigParser
+from decompiler1cwrapper.main import Decompiler
 from pathlib import Path
 import shutil
 import subprocess
@@ -9,13 +10,13 @@ import sys
 import tempfile
 
 
-__version__ = '1.0.0'
+__version__ = '2.0.0'
 
 
 def get_setting(section, key):
-    settings_config_file_path_rel = Path('diff-1c.ini')
+    settings_config_file_path_rel = Path('diff1c.ini')
     if not settings_config_file_path_rel.exists():
-        settings_config_file_path_rel = Path(__file__).parent / settings_config_file_path_rel
+        settings_config_file_path_rel = Path.home() / settings_config_file_path_rel
         if not settings_config_file_path_rel.exists():
             raise Exception('Файл настроек не существует!')
     config = RawConfigParser()
@@ -44,18 +45,7 @@ def main():
         import pydevd
         pydevd.settrace(port=10050)
 
-    exe_1c = Path(get_setting('General', '1C'))
-    if not exe_1c.exists():
-        raise Exception('Платформа не существует!')
-    ib = Path(get_setting('General', 'IB'))
-    if not ib.exists():
-        raise Exception('Сервисной информационной базы не существует!')
-    v8_reader = Path(get_setting('General', 'V8Reader'))
-    if not v8_reader.exists():
-        raise Exception('V8Reader не существует!')
-    gcomp = Path(get_setting('General', 'GComp'))
-    if not gcomp.exists():
-        raise Exception('GComp не существует!')
+    decompiler = Decompiler()
 
     # base
     base_path = Path(args.base)
@@ -68,29 +58,8 @@ def main():
     else:
         shutil.rmtree(str(base_source_path), ignore_errors=True)
 
-    with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat', delete=False) as base_bat_file:
-        base_bat_file.write('@echo off\n')
-        base_temp_path_suffix_lower = base_temp_path.suffix.lower()
-        if base_temp_path_suffix_lower in ['.epf', '.erf']:
-            base_bat_file.write('"{}" /F"{}" /DisableStartupMessages /Execute"{}" {}'.format(
-                str(exe_1c),
-                str(ib),
-                str(v8_reader),
-                '/C"decompile;pathtocf;{};pathout;{};shutdown;convert-mxl2txt;"'.format(
-                    str(base_temp_path),
-                    str(base_source_path)
-                )
-            ))
-        elif base_temp_path_suffix_lower in ['.ert', '.md']:
-            base_bat_file.write('"{}" -d -F "{}" -DD "{}"'.format(
-                str(gcomp),
-                str(base_temp_path),
-                str(base_source_path)
-            ))
-    exit_code = subprocess.check_call(['cmd.exe', '/C', str(base_bat_file.name)])
-    if not exit_code == 0:
-        raise Exception('Не удалось разобрать файл {}'.format(str(base_path)))
-    Path(base_bat_file.name).unlink()
+    decompiler.perform(base_temp_path, base_source_path)
+
     base_temp_path.unlink()
 
     # mine
@@ -104,29 +73,8 @@ def main():
     else:
         shutil.rmtree(str(mine_source_path), ignore_errors=True)
 
-    with tempfile.NamedTemporaryFile('w', encoding='cp866', suffix='.bat', delete=False) as mine_bat_file:
-        mine_bat_file.write('@echo off\n')
-        mine_temp_path_suffix_lower = mine_temp_path.suffix.lower()
-        if mine_temp_path_suffix_lower in ['.epf', '.erf']:
-            mine_bat_file.write('"{}" /F"{}" /DisableStartupMessages /Execute"{}" {}'.format(
-                str(exe_1c),
-                str(ib),
-                str(v8_reader),
-                '/C"decompile;pathtocf;{};pathout;{};shutdown;convert-mxl2txt;"'.format(
-                    str(mine_temp_path),
-                    str(mine_source_path)
-                )
-            ))
-        elif mine_temp_path_suffix_lower in ['.ert', '.md']:
-            mine_bat_file.write('"{}" -d -F "{}" -DD "{}"'.format(
-                str(gcomp),
-                str(mine_temp_path),
-                str(mine_source_path)
-            ))
-    exit_code = subprocess.check_call(['cmd.exe', '/C', str(mine_bat_file.name)])
-    if not exit_code == 0:
-        raise Exception('Не удалось разобрать файл {}'.format(str(mine_path)))
-    Path(mine_bat_file.name).unlink()
+    decompiler.perform(mine_temp_path, mine_source_path)
+
     mine_temp_path.unlink()
 
     tool_args = None
