@@ -17,10 +17,6 @@
 - Windows
 - Python 3.5
 - Пакет [decompiler1cwrapper](https://github.com/Cujoko/decompiler1cwrapper) с необходимыми настройками
-- Платформа 1С:Предприятие 8.3
-- Сервисная информационная база (в которой будет запускаться *V8Reader.epf*)
-- [v8Reader](https://github.com/xDrivenDevelopment/v8Reader)
-- [GComp](http://1c.alterplast.ru/gcomp/)
 
 Состав
 ---
