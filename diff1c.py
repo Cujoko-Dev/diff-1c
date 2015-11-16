@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from argparse import ArgumentParser
 from configparser import RawConfigParser
-from decompiler1cwrapper.main import Decompiler
+from decompiler1cwrapper import Decompiler
 from pathlib import Path
 import shutil
 import subprocess
@@ -10,7 +10,7 @@ import sys
 import tempfile
 
 
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 
 
 def get_setting(section, key):
