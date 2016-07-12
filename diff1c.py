@@ -10,7 +10,7 @@ import sys
 import tempfile
 
 
-__version__ = '2.0.1'
+__version__ = '2.1.0'
 
 
 def get_setting(section, key):
