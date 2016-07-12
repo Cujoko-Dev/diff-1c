@@ -35,6 +35,10 @@ setup(
 
     keywords='1c diff v8reader v8unpack gcomp',
 
+    install_requires=[
+        'decompiler1cwrapper'
+    ],
+
     py_modules=['diff1c'],
 
     entry_points={
