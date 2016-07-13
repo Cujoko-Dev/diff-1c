@@ -4,7 +4,7 @@
 Что делает
 ---
 
-Файлы разбираются с помощью пакета [decompiler1cwrapper](https://github.com/Cujoko/decompiler1cwrapper) в каталоги,
+Файлы разбираются с помощью пакета [decompiler1cwrapper][1] в каталоги,
 которые затем сравниваются указанной в аргументах командной строки утилитой сравнения. Поддерживаются KDiff3,
 AraxisMerge, WinMerge, ExamDiff.
 
@@ -15,10 +15,12 @@ AraxisMerge, WinMerge, ExamDiff.
 
 - Windows
 - Python 3.5
-- Пакет [decompiler1cwrapper](https://github.com/Cujoko/decompiler1cwrapper) с необходимыми настройками
+- Пакет [decompiler1cwrapper][1] с необходимыми настройками
 
 Состав
 ---
 
 - *diff1c.py* — собственно скрипт
 - *diff1c.ini.sample* — образец файла с настройками
+
+[1]: https://github.com/Cujoko/decompiler1cwrapper
