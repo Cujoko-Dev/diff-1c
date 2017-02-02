@@ -1,4 +1,4 @@
-#! python3
+﻿#! python3
 # -*- coding: utf-8 -*-
 import diff1c
 from setuptools import setup
@@ -36,7 +36,8 @@ setup(
     keywords='1c diff v8reader v8unpack gcomp',
 
     install_requires=[
-        'decompiler1cwrapper'
+        'appdirs>=1.4.0',
+        'decompiler1cwrapper>=1.2.0'
     ],
 
     py_modules=['diff1c'],

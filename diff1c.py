@@ -1,6 +1,7 @@
 #! python3
 # -*- coding: utf-8 -*-
 from argparse import ArgumentParser
+from appdirs import user_data_dir
 from configparser import RawConfigParser
 from decompiler1cwrapper import Decompiler
 from pathlib import Path
@@ -10,13 +11,17 @@ import sys
 import tempfile
 
 
-__version__ = '2.1.1'
+__version__ = '2.2.0'
+
+APP_AUTHOR = "Util1C"
+APP_NAME = "Diff1C"
 
 
 def get_setting(section, key):
     settings_config_file_path_rel = Path('diff1c.ini')
     if not settings_config_file_path_rel.exists():
-        settings_config_file_path_rel = Path.home() / settings_config_file_path_rel
+        settings_config_file_path_rel = Path(user_data_dir(APP_NAME, APP_AUTHOR, roaming=True)) / \
+                                        settings_config_file_path_rel
         if not settings_config_file_path_rel.exists():
             raise Exception('Файл настроек не существует!')
     config = RawConfigParser()
