@@ -11,7 +11,7 @@ import sys
 import tempfile
 
 
-__version__ = '2.2.0'
+__version__ = '2.2.1'
 
 APP_AUTHOR = "Util1C"
 APP_NAME = "Diff1C"
