@@ -44,7 +44,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'diff-1c=diff-1c:main'
+            'diff-1c=diff_1c:main'
         ]
     }
 )
