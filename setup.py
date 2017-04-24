@@ -1,17 +1,17 @@
 ﻿#! python3
 # -*- coding: utf-8 -*-
-import diff1c
+import diff_1c
 from setuptools import setup
 
 
 setup(
-    name='diff1c',
+    name='diff_1c',
 
-    version=diff1c.__version__,
+    version=diff_1c.__version__,
 
     description='Diff utility for 1C:Enterprise',
 
-    url='https://github.com/Cujoko/diff1c',
+    url='https://github.com/Cujoko/diff-1c',
 
     author='Cujoko',
     author_email='cujoko@gmail.com',
@@ -37,14 +37,14 @@ setup(
 
     install_requires=[
         'appdirs>=1.4.3',
-        'decompiler1cwrapper>=1.2.2'
+        'parse-1c-build>=2.0.0'
     ],
 
-    py_modules=['diff1c'],
+    py_modules=['diff-1c'],
 
     entry_points={
         'console_scripts': [
-            'diff1c=diff1c:main'
+            'diff-1c=diff-1c:main'
         ]
     }
 )

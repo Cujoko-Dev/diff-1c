@@ -3,7 +3,7 @@
 from argparse import ArgumentParser
 from appdirs import user_data_dir
 from configparser import RawConfigParser
-from decompiler1cwrapper import Decompiler
+from parse_1c_build import Parser
 from pathlib import Path
 import shutil
 import subprocess
@@ -11,14 +11,14 @@ import sys
 import tempfile
 
 
-__version__ = '2.2.1'
+__version__ = '3.0.0'
 
-APP_AUTHOR = "Util1C"
-APP_NAME = "Diff1C"
+APP_AUTHOR = 'util-1c'
+APP_NAME = 'diff-1c'
 
 
 def get_setting(section, key):
-    settings_config_file_path_rel = Path('diff1c.ini')
+    settings_config_file_path_rel = Path('settings.ini')
     if not settings_config_file_path_rel.exists():
         settings_config_file_path_rel = Path(user_data_dir(APP_NAME, APP_AUTHOR, roaming=True)) / \
                                         settings_config_file_path_rel
@@ -50,7 +50,7 @@ def main():
         import pydevd
         pydevd.settrace(port=10050)
 
-    decompiler = Decompiler()
+    parser = Parser()
 
     # base
     base_path = Path(args.base)
@@ -63,7 +63,7 @@ def main():
     else:
         shutil.rmtree(str(base_source_path), ignore_errors=True)
 
-    decompiler.perform(base_temp_path, base_source_path)
+    parser.perform(base_temp_path, base_source_path)
 
     base_temp_path.unlink()
 
@@ -78,7 +78,7 @@ def main():
     else:
         shutil.rmtree(str(mine_source_path), ignore_errors=True)
 
-    decompiler.perform(mine_temp_path, mine_source_path)
+    parser.perform(mine_temp_path, mine_source_path)
 
     mine_temp_path.unlink()
 
