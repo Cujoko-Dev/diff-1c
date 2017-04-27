@@ -36,8 +36,8 @@ setup(
     keywords='1c diff v8reader v8unpack gcomp',
 
     install_requires=[
-        'appdirs>=1.4.3',
-        'parse-1c-build>=2.0.0'
+        'appdirs',
+        'parse-1c-build'
     ],
 
     py_modules=['diff-1c'],
