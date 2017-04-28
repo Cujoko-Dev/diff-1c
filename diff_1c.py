@@ -11,7 +11,7 @@ import sys
 import tempfile
 
 
-__version__ = '3.0.1'
+__version__ = '3.0.2'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
@@ -63,7 +63,7 @@ def main():
     else:
         shutil.rmtree(str(base_source_path), ignore_errors=True)
 
-    parser.perform(base_temp_path, base_source_path)
+    parser.parse(base_temp_path, base_source_path)
 
     base_temp_path.unlink()
 
@@ -78,7 +78,7 @@ def main():
     else:
         shutil.rmtree(str(mine_source_path), ignore_errors=True)
 
-    parser.perform(mine_temp_path, mine_source_path)
+    parser.parse(mine_temp_path, mine_source_path)
 
     mine_temp_path.unlink()
 
