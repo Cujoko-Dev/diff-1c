@@ -1,4 +1,4 @@
-#! python3
+#! python3.6
 # -*- coding: utf-8 -*-
 from argparse import ArgumentParser
 from appdirs import user_data_dir
@@ -11,7 +11,7 @@ import sys
 import tempfile
 
 
-__version__ = '3.0.2'
+__version__ = '3.0.3'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
