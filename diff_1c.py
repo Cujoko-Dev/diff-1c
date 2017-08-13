@@ -12,13 +12,13 @@ import sys
 import tempfile
 
 
-__version__ = '3.1.2'
+__version__ = '3.2.1'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
 
 
-def get_setting(section, key):
+def get_setting(section: str, key: str) -> str:
     settings_config_file_path = Path('settings.ini')
     if not settings_config_file_path.exists():
         settings_config_file_path = Path(user_data_dir(APP_NAME, APP_AUTHOR, roaming=True)) / \
@@ -29,7 +29,7 @@ def get_setting(section, key):
     config.optionxform = lambda option: option
     config.read(str(settings_config_file_path), 'utf-8')
 
-    return config[section][key]  # fixme
+    return config[section][key]
 
 
 def main():
@@ -40,6 +40,7 @@ def main():
                                                                                'then debug mode is enabled')
     argparser.add_argument('--tool', choices=['KDiff3', 'AraxisMerge', 'WinMerge', 'ExamDiff'], default='KDiff3',
                            help='external diff program')
+    argparser.add_argument('--name-format', choices=['TortoiseGit'], default='TortoiseGit', help='name format')
     argparser.add_argument('--bname', help='the window title for the base file')
     argparser.add_argument('--yname', help='the window title for your file')
     argparser.add_argument('base', help='the original file without your changes')
@@ -56,109 +57,147 @@ def main():
 
     parser = Parser()
 
+    exclude_file_names = get_setting('General', 'ExcludeFiles').split(':')
+
     # base
+    base_is_excluded = False
+
     base_file_path = Path(args.base)
 
-    base_temp_file, base_temp_file_name = tempfile.mkstemp(base_file_path.suffix)
-    os.close(base_temp_file)
+    if args.name_format == 'TortoiseGit':
+        bname_file_path = Path(args.bname.split(':')[0])
+    else:
+        bname_file_path = Path(args.bname.split(':')[0])
 
-    base_temp_file_path = Path(base_temp_file_name)
-    shutil.copyfile(str(base_file_path), str(base_temp_file_path))
+    if bname_file_path.name not in exclude_file_names:
+        base_temp_file, base_temp_file_name = tempfile.mkstemp(base_file_path.suffix)
+        os.close(base_temp_file)
 
-    base_source_dir_path = Path(tempfile.mkdtemp())
+        base_temp_file_path = Path(base_temp_file_name)
+        shutil.copyfile(str(base_file_path), str(base_temp_file_path))
 
-    parser.parse(base_temp_file_path, base_source_dir_path)
+        base_source_dir_path = Path(tempfile.mkdtemp())
 
-    base_temp_file_path.unlink()
+        parser.parse(base_temp_file_path, base_source_dir_path)
+
+        base_temp_file_path.unlink()
+    else:
+        base_is_excluded = True
 
     # mine
+    mine_is_excluded = False
+
     mine_file_path = Path(args.mine)
 
-    mine_temp_file, mine_temp_file_name = tempfile.mkstemp(mine_file_path.suffix)
-    os.close(mine_temp_file)
+    if args.name_format == 'TortoiseGit':
+        yname_file_path = Path(args.yname.split(':')[0])
+    else:
+        yname_file_path = Path(args.yname.split(':')[0])
 
-    mine_temp_file_path = Path(mine_temp_file_name)
-    shutil.copyfile(str(mine_file_path), str(mine_temp_file_path))
+    if yname_file_path.name not in exclude_file_names:
+        mine_temp_file, mine_temp_file_name = tempfile.mkstemp(mine_file_path.suffix)
+        os.close(mine_temp_file)
 
-    mine_source_dir_path = Path(tempfile.mkdtemp())
+        mine_temp_file_path = Path(mine_temp_file_name)
+        shutil.copyfile(str(mine_file_path), str(mine_temp_file_path))
 
-    parser.parse(mine_temp_file_path, mine_source_dir_path)
+        mine_source_dir_path = Path(tempfile.mkdtemp())
 
-    mine_temp_file_path.unlink()
+        parser.parse(mine_temp_file_path, mine_source_dir_path)
+
+        mine_temp_file_path.unlink()
+    else:
+        mine_is_excluded = True
 
     tool_args = None
     if args.tool == 'KDiff3':
         tool_file_path = Path(get_setting('General', 'KDiff3'))
-        tool_args = [
-            str(tool_file_path),
-            '--cs',
-            'EncodingForA=windows-1251',
-            '--cs',
-            'EncodingForB=windows-1251',
-            str(base_source_dir_path),
-            str(mine_source_dir_path)
-        ]
+
+        tool_args = [ str(tool_file_path) ]
+
+        # base
+        if base_is_excluded:
+            tool_args += [ '--cs', 'EncodingForA=UTF-8', str(base_file_path) ]
+        else:
+            tool_args += [ '--cs', 'EncodingForA=windows-1251', str(base_source_dir_path) ]
+
         if args.bname is not None:
-            tool_args += [
-                '--L1',
-                args.bname
-            ]
+            tool_args += [ '--L1', args.bname ]
+
+        # mine
+        if mine_is_excluded:
+            tool_args += [ '--cs', 'EncodingForB=UTF-8', str(mine_file_path) ]
+        else:
+            tool_args += [ '--cs', 'EncodingForB=windows-1251', str(mine_source_dir_path) ]
+
         if args.yname is not None:
-            tool_args += [
-                '--L2',
-                args.yname
-            ]
+            tool_args += [ '--L2', args.yname ]
     elif args.tool == 'AraxisMerge':
         tool_file_path = Path(get_setting('General', 'AraxisMerge'))
-        tool_args = [
-            str(tool_file_path),
-            '/max',
-            '/wait',
-            str(base_source_dir_path),
-            str(mine_source_dir_path)
-        ]
+
+        tool_args = [ str(tool_file_path), '/max', '/wait' ]
+
+        # base
+        if base_is_excluded:
+            tool_args += [ str(base_file_path) ]
+        else:
+            tool_args += [ str(base_source_dir_path) ]
+
         if args.bname is not None:
-            tool_args += [
-                '/title1:{}'.format(args.bname)
-            ]
+            tool_args += [ '/title1:{}'.format(args.bname) ]
+
+        # mine
+        if mine_is_excluded:
+            tool_args += [ str(mine_file_path) ]
+        else:
+            tool_args += [ str(mine_source_dir_path) ]
+
         if args.yname is not None:
-            tool_args += [
-                '/title2:{}'.format(args.yname)
-            ]
+            tool_args += [ '/title2:{}'.format(args.yname) ]
     elif args.tool == 'WinMerge':
         tool_file_path = Path(get_setting('General', 'WinMerge'))
-        tool_args = [
-            str(tool_file_path),
-            '-e',
-            '-ub',
-            str(base_source_dir_path),
-            str(mine_source_dir_path)
-        ]
+
+        tool_args = [ str(tool_file_path), '-e', '-ub' ]
+
+        # base
+        if base_is_excluded:
+            tool_args += [ str(base_file_path) ]
+        else:
+            tool_args += [ str(base_source_dir_path) ]
+
         if args.bname is not None:
-            tool_args += [
-                '-dl',
-                args.bname
-            ]
+            tool_args += [ '-dl', args.bname ]
+
+        # mine
+        if mine_is_excluded:
+            tool_args += [ str(mine_file_path) ]
+        else:
+            tool_args += [ str(mine_source_dir_path) ]
+
         if args.yname is not None:
-            tool_args += [
-                '-dr',
-                args.yname
-            ]
+            tool_args += [ '-dr', args.yname ]
     elif args.tool == 'ExamDiff':
         tool_file_path = Path(get_setting('General', 'ExamDiff'))
-        tool_args = [
-            str(tool_file_path),
-            str(base_source_dir_path),
-            str(mine_source_dir_path)
-        ]
+
+        tool_args = [ str(tool_file_path) ]
+
+        # base
+        if base_is_excluded:
+            tool_args += [ str(base_file_path) ]
+        else:
+            tool_args += [ str(base_source_dir_path) ]
+
         if args.bname is not None:
-            tool_args += [
-                '--left_display_name:{}'.format(args.bname)
-            ]
+            tool_args += [ '--left_display_name:{}'.format(args.bname) ]
+
+        # mine
+        if mine_is_excluded:
+            tool_args += [ str(mine_file_path) ]
+        else:
+            tool_args += [ str(mine_source_dir_path) ]
+
         if args.yname is not None:
-            tool_args += [
-                '--right_display_name:{}'.format(args.yname)
-            ]
+            tool_args += [ '--right_display_name:{}'.format(args.yname) ]
 
     if tool_args is None:
         raise Exception('Не удалось сравнить файлы {} и {}'.format(str(base_file_path), str(mine_file_path)))
