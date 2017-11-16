@@ -1,18 +1,18 @@
 #! python3.6
 # -*- coding: utf-8 -*-
 from argparse import ArgumentParser
-from appdirs import user_data_dir
 from configparser import RawConfigParser
 import os
-from parse_1c_build import Parser
 from pathlib import Path
 import shutil
 import subprocess
 import sys
 import tempfile
 
+from appdirs import user_data_dir, site_data_dir
+from parse_1c_build import Parser
 
-__version__ = '3.2.1'
+__version__ = '3.2.2'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
@@ -21,10 +21,12 @@ APP_NAME = 'diff-1c'
 def get_setting(section: str, key: str) -> str:
     settings_config_file_path = Path('settings.ini')
     if not settings_config_file_path.exists():
-        settings_config_file_path = Path(user_data_dir(APP_NAME, APP_AUTHOR, roaming=True)) / \
-                                        settings_config_file_path
+        settings_config_file_path = Path(
+            user_data_dir(APP_NAME, APP_AUTHOR, roaming=True)) / settings_config_file_path.name
         if not settings_config_file_path.exists():
-            raise Exception('Файл настроек не существует!')
+            settings_config_file_path = Path(site_data_dir(APP_NAME, APP_AUTHOR)) / settings_config_file_path.name
+            if not settings_config_file_path.exists():
+                raise Exception('Settings file does not exist!')
     config = RawConfigParser()
     config.optionxform = lambda option: option
     config.read(str(settings_config_file_path), 'utf-8')
