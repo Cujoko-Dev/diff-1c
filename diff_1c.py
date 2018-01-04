@@ -1,4 +1,3 @@
-#! python3.6
 # -*- coding: utf-8 -*-
 from argparse import ArgumentParser
 from configparser import RawConfigParser
@@ -12,7 +11,7 @@ import tempfile
 from appdirs import user_data_dir, site_data_dir
 from parse_1c_build import Parser
 
-__version__ = '3.2.3'
+__version__ = '3.2.4'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
@@ -29,7 +28,7 @@ def get_setting(section: str, key: str) -> str:
                 raise Exception('Settings file does not exist!')
 
     settings = RawConfigParser()
-    settings.optionxform = lambda option: option
+    settings.optionxform = str
     settings.read(str(settings_file_path), 'utf-8')
 
     return settings[section][key]
