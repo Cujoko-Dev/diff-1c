@@ -11,7 +11,7 @@ import tempfile
 from appdirs import user_data_dir, site_data_dir
 from parse_1c_build import Parser
 
-__version__ = '3.2.4'
+__version__ = '3.2.5'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'

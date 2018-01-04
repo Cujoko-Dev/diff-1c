@@ -1,5 +1,4 @@
-﻿#! python3.6
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import diff_1c
 from setuptools import setup
 
