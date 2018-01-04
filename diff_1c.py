@@ -12,26 +12,27 @@ import tempfile
 from appdirs import user_data_dir, site_data_dir
 from parse_1c_build import Parser
 
-__version__ = '3.2.2'
+__version__ = '3.2.3'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
 
 
 def get_setting(section: str, key: str) -> str:
-    settings_config_file_path = Path('settings.ini')
-    if not settings_config_file_path.exists():
-        settings_config_file_path = Path(
-            user_data_dir(APP_NAME, APP_AUTHOR, roaming=True)) / settings_config_file_path.name
-        if not settings_config_file_path.exists():
-            settings_config_file_path = Path(site_data_dir(APP_NAME, APP_AUTHOR)) / settings_config_file_path.name
-            if not settings_config_file_path.exists():
+    settings_file_path = Path('settings.ini')
+    if not settings_file_path.is_file():
+        settings_file_path = Path(
+            user_data_dir(APP_NAME, APP_AUTHOR, roaming=True)) / settings_file_path.name
+        if not settings_file_path.is_file():
+            settings_file_path = Path(site_data_dir(APP_NAME, APP_AUTHOR)) / settings_file_path.name
+            if not settings_file_path.is_file():
                 raise Exception('Settings file does not exist!')
-    config = RawConfigParser()
-    config.optionxform = lambda option: option
-    config.read(str(settings_config_file_path), 'utf-8')
 
-    return config[section][key]
+    settings = RawConfigParser()
+    settings.optionxform = lambda option: option
+    settings.read(str(settings_file_path), 'utf-8')
+
+    return settings[section][key]
 
 
 def main():
@@ -115,91 +116,91 @@ def main():
     if args.tool == 'KDiff3':
         tool_file_path = Path(get_setting('General', 'KDiff3'))
 
-        tool_args = [ str(tool_file_path) ]
+        tool_args = [str(tool_file_path)]
 
         # base
         if base_is_excluded:
-            tool_args += [ '--cs', 'EncodingForA=UTF-8', str(base_file_path) ]
+            tool_args += ['--cs', 'EncodingForA=UTF-8', str(base_file_path)]
         else:
-            tool_args += [ '--cs', 'EncodingForA=windows-1251', str(base_source_dir_path) ]
+            tool_args += ['--cs', 'EncodingForA=windows-1251', str(base_source_dir_path)]
 
         if args.bname is not None:
-            tool_args += [ '--L1', args.bname ]
+            tool_args += ['--L1', args.bname]
 
         # mine
         if mine_is_excluded:
-            tool_args += [ '--cs', 'EncodingForB=UTF-8', str(mine_file_path) ]
+            tool_args += ['--cs', 'EncodingForB=UTF-8', str(mine_file_path)]
         else:
-            tool_args += [ '--cs', 'EncodingForB=windows-1251', str(mine_source_dir_path) ]
+            tool_args += ['--cs', 'EncodingForB=windows-1251', str(mine_source_dir_path)]
 
         if args.yname is not None:
-            tool_args += [ '--L2', args.yname ]
+            tool_args += ['--L2', args.yname]
     elif args.tool == 'AraxisMerge':
         tool_file_path = Path(get_setting('General', 'AraxisMerge'))
 
-        tool_args = [ str(tool_file_path), '/max', '/wait' ]
+        tool_args = [str(tool_file_path), '/max', '/wait']
 
         # base
         if base_is_excluded:
-            tool_args += [ str(base_file_path) ]
+            tool_args += [str(base_file_path)]
         else:
-            tool_args += [ str(base_source_dir_path) ]
+            tool_args += [str(base_source_dir_path)]
 
         if args.bname is not None:
-            tool_args += [ '/title1:{}'.format(args.bname) ]
+            tool_args += ['/title1:{}'.format(args.bname)]
 
         # mine
         if mine_is_excluded:
-            tool_args += [ str(mine_file_path) ]
+            tool_args += [str(mine_file_path)]
         else:
-            tool_args += [ str(mine_source_dir_path) ]
+            tool_args += [str(mine_source_dir_path)]
 
         if args.yname is not None:
-            tool_args += [ '/title2:{}'.format(args.yname) ]
+            tool_args += ['/title2:{}'.format(args.yname)]
     elif args.tool == 'WinMerge':
         tool_file_path = Path(get_setting('General', 'WinMerge'))
 
-        tool_args = [ str(tool_file_path), '-e', '-ub' ]
+        tool_args = [str(tool_file_path), '-e', '-ub']
 
         # base
         if base_is_excluded:
-            tool_args += [ str(base_file_path) ]
+            tool_args += [str(base_file_path)]
         else:
-            tool_args += [ str(base_source_dir_path) ]
+            tool_args += [str(base_source_dir_path)]
 
         if args.bname is not None:
-            tool_args += [ '-dl', args.bname ]
+            tool_args += ['-dl', args.bname]
 
         # mine
         if mine_is_excluded:
-            tool_args += [ str(mine_file_path) ]
+            tool_args += [str(mine_file_path)]
         else:
-            tool_args += [ str(mine_source_dir_path) ]
+            tool_args += [str(mine_source_dir_path)]
 
         if args.yname is not None:
-            tool_args += [ '-dr', args.yname ]
+            tool_args += ['-dr', args.yname]
     elif args.tool == 'ExamDiff':
         tool_file_path = Path(get_setting('General', 'ExamDiff'))
 
-        tool_args = [ str(tool_file_path) ]
+        tool_args = [str(tool_file_path)]
 
         # base
         if base_is_excluded:
-            tool_args += [ str(base_file_path) ]
+            tool_args += [str(base_file_path)]
         else:
-            tool_args += [ str(base_source_dir_path) ]
+            tool_args += [str(base_source_dir_path)]
 
         if args.bname is not None:
-            tool_args += [ '--left_display_name:{}'.format(args.bname) ]
+            tool_args += ['--left_display_name:{}'.format(args.bname)]
 
         # mine
         if mine_is_excluded:
-            tool_args += [ str(mine_file_path) ]
+            tool_args += [str(mine_file_path)]
         else:
-            tool_args += [ str(mine_source_dir_path) ]
+            tool_args += [str(mine_source_dir_path)]
 
         if args.yname is not None:
-            tool_args += [ '--right_display_name:{}'.format(args.yname) ]
+            tool_args += ['--right_display_name:{}'.format(args.yname)]
 
     if tool_args is None:
         raise Exception('Не удалось сравнить файлы {} и {}'.format(str(base_file_path), str(mine_file_path)))
