@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
-import diff_1c
 from setuptools import setup
 
+import diff_1c
 
 setup(
     name='diff_1c',
@@ -36,7 +36,8 @@ setup(
 
     install_requires=[
         'appdirs',
-        'parse-1c-build'
+        'parse-1c-build',
+        'yodl'
     ],
 
     py_modules=['diff-1c'],

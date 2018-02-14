@@ -1,37 +1,37 @@
 # -*- coding: utf-8 -*-
-from argparse import ArgumentParser
-from configparser import RawConfigParser
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import sys
 import tempfile
+from argparse import ArgumentParser
+from pathlib import Path
 
+import yaml
+import yodl
 from appdirs import user_data_dir, site_data_dir
 from parse_1c_build import Parser
 
-__version__ = '3.2.5'
+__version__ = '3.3.0'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
 
 
-def get_setting(section: str, key: str) -> str:
-    settings_file_path = Path('settings.ini')
+def get_settings():
+    # Settings
+    settings_file_path = Path('settings.yaml')
     if not settings_file_path.is_file():
-        settings_file_path = Path(
-            user_data_dir(APP_NAME, APP_AUTHOR, roaming=True)) / settings_file_path.name
+        settings_file_path = Path(user_data_dir(APP_NAME, APP_AUTHOR, roaming=True)) / settings_file_path.name
         if not settings_file_path.is_file():
             settings_file_path = Path(site_data_dir(APP_NAME, APP_AUTHOR)) / settings_file_path.name
             if not settings_file_path.is_file():
-                raise Exception('Settings file does not exist!')
+                raise SettingsException('Settings file does not exist!')
 
-    settings = RawConfigParser()
-    settings.optionxform = str
-    settings.read(str(settings_file_path), 'utf-8')
+    with settings_file_path.open(encoding='utf-8') as settings_file:
+        settings = yaml.load(settings_file, yodl.OrderedDictYAMLLoader)
 
-    return settings[section][key]
+    return settings
 
 
 def main():
@@ -50,16 +50,11 @@ def main():
 
     args = argparser.parse_args()
 
-    if args.debug:
-        import sys
-        sys.path.append('C:\\Python34\\pycharm-debug-py3k.egg')
-
-        import pydevd
-        pydevd.settrace(port=10050)
+    settings = get_settings()
 
     parser = Parser()
 
-    exclude_file_names = get_setting('General', 'ExcludeFiles').split(':')
+    exclude_file_names = settings['General']['ExcludeFiles'].split(':')
 
     # base
     base_is_excluded = False
@@ -113,7 +108,7 @@ def main():
 
     tool_args = None
     if args.tool == 'KDiff3':
-        tool_file_path = Path(get_setting('General', 'KDiff3'))
+        tool_file_path = Path(settings['General']['KDiff3'])
 
         tool_args = [str(tool_file_path)]
 
@@ -135,7 +130,7 @@ def main():
         if args.yname is not None:
             tool_args += ['--L2', args.yname]
     elif args.tool == 'AraxisMerge':
-        tool_file_path = Path(get_setting('General', 'AraxisMerge'))
+        tool_file_path = Path(settings['General']['AraxisMerge'])
 
         tool_args = [str(tool_file_path), '/max', '/wait']
 
@@ -157,7 +152,7 @@ def main():
         if args.yname is not None:
             tool_args += ['/title2:{}'.format(args.yname)]
     elif args.tool == 'WinMerge':
-        tool_file_path = Path(get_setting('General', 'WinMerge'))
+        tool_file_path = Path(settings['General']['WinMerge'])
 
         tool_args = [str(tool_file_path), '-e', '-ub']
 
@@ -179,7 +174,7 @@ def main():
         if args.yname is not None:
             tool_args += ['-dr', args.yname]
     elif args.tool == 'ExamDiff':
-        tool_file_path = Path(get_setting('General', 'ExamDiff'))
+        tool_file_path = Path(settings['General']['ExamDiff'])
 
         tool_args = [str(tool_file_path)]
 
@@ -207,6 +202,10 @@ def main():
     exit_code = subprocess.check_call(tool_args)
     if not exit_code == 0:
         raise Exception('Не удалось сравнить файлы {} и {}'.format(str(base_file_path), str(mine_file_path)))
+
+
+class SettingsException(Exception):
+    pass
 
 
 if __name__ == '__main__':
