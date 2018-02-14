@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 from argparse import ArgumentParser
+from collections import OrderedDict
 from pathlib import Path
 
 import yaml
@@ -12,13 +13,13 @@ import yodl
 from appdirs import user_data_dir, site_data_dir
 from parse_1c_build import Parser
 
-__version__ = '3.3.0'
+__version__ = '3.3.1'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
 
 
-def get_settings():
+def get_settings() -> OrderedDict:
     # Settings
     settings_file_path = Path('settings.yaml')
     if not settings_file_path.is_file():
@@ -34,7 +35,7 @@ def get_settings():
     return settings
 
 
-def main():
+def main() -> None:
     argparser = ArgumentParser()
 
     argparser.add_argument('-v', '--version', action='version', version='%(prog)s, ver. {}'.format(__version__))
