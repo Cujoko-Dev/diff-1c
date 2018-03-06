@@ -1,7 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
-from setuptools import setup
-
 import diff_1c
+from setuptools import setup
 
 setup(
     name='diff_1c',
@@ -38,6 +37,7 @@ setup(
     install_requires=[
         'appdirs',
         'parse-1c-build',
+        'PyYAML',
         'yodl'
     ],
 
