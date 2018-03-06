@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
+from argparse import ArgumentParser
+from collections import OrderedDict
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import sys
 import tempfile
-from argparse import ArgumentParser
-from collections import OrderedDict
-from pathlib import Path
 
+from appdirs import site_data_dir, user_data_dir
+from parse_1c_build import Parser
 import yaml
 import yodl
-from appdirs import user_data_dir, site_data_dir
-from parse_1c_build import Parser
 
 __version__ = '3.3.2'
 
