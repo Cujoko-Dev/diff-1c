@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
-from argparse import ArgumentParser
 from collections import OrderedDict
 import os
 from pathlib import Path
 import shutil
 import subprocess
-import sys
 import tempfile
+from typing import Any
 
 from appdirs import site_data_dir, user_data_dir
 from parse_1c_build import Parser
 import yaml
 import yodl
 
-__version__ = '3.3.2'
+__version__ = '4.0.0'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
@@ -35,22 +34,7 @@ def get_settings() -> OrderedDict:
     return settings
 
 
-def main() -> None:
-    argparser = ArgumentParser()
-
-    argparser.add_argument('-v', '--version', action='version', version='%(prog)s, ver. {}'.format(__version__))
-    argparser.add_argument('--debug', action='store_true', default=False, help='if this option exists '
-                                                                               'then debug mode is enabled')
-    argparser.add_argument('--tool', choices=['KDiff3', 'AraxisMerge', 'WinMerge', 'ExamDiff'], default='KDiff3',
-                           help='external diff program')
-    argparser.add_argument('--name-format', choices=['TortoiseGit'], default='TortoiseGit', help='name format')
-    argparser.add_argument('--bname', help='the window title for the base file')
-    argparser.add_argument('--yname', help='the window title for your file')
-    argparser.add_argument('base', help='the original file without your changes')
-    argparser.add_argument('mine', help='your own file, with your changes')
-
-    args = argparser.parse_args()
-
+def run(args: Any) -> None:
     settings = get_settings()
 
     parser = Parser()
@@ -207,7 +191,3 @@ def main() -> None:
 
 class SettingsException(Exception):
     pass
-
-
-if __name__ == '__main__':
-    sys.exit(main())
