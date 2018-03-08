@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
-import diff_1c
 from setuptools import setup
+
+import diff_1c
 
 setup(
     name='diff_1c',
@@ -45,7 +46,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'diff1c=diff_1c:__main__:run'
+            'diff1c=diff_1c:__main__.run'
         ]
     }
 )
