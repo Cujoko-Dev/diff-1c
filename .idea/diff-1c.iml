@@ -8,6 +8,9 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.6" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="cujoko-commons" />
+    <orderEntry type="module" module-name="commons-1c" />
+    <orderEntry type="module" module-name="parse-1c-build" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />

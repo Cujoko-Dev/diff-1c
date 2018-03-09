@@ -104,7 +104,7 @@ class DiffParser(Parser):
                 tool_args += [str(base_source_dir_path)]
 
             if self.args.bname is not None:
-                tool_args += ['/title1:{}'.format(args.bname)]
+                tool_args += ['/title1:{}'.format(self.args.bname)]
 
             # mine
             if mine_is_excluded:
@@ -168,6 +168,6 @@ class DiffParser(Parser):
 
 
 def run(args: Any) -> None:
-    settings = get_settings()
+    settings = get_settings(APP_NAME, APP_AUTHOR)
     processor = Parser(args, settings)
     processor.run()
