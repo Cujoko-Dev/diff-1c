@@ -9,7 +9,7 @@ from typing import Any
 from commons import get_settings
 from parse_1c_build.parse import Parser
 
-__version__ = '4.1.0'
+__version__ = '4.1.1'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
@@ -42,7 +42,7 @@ def run(args: Any) -> None:
 
         base_source_dir_path = Path(tempfile.mkdtemp())
 
-        Parser().parse(base_temp_file_path, base_source_dir_path)
+        Parser().run(base_temp_file_path, base_source_dir_path)
 
         base_temp_file_path.unlink()
     else:
@@ -68,7 +68,7 @@ def run(args: Any) -> None:
 
         mine_source_dir_path = Path(tempfile.mkdtemp())
 
-        Parser().parse(mine_temp_file_path, mine_source_dir_path)
+        Parser().run(mine_temp_file_path, mine_source_dir_path)
 
         mine_temp_file_path.unlink()
     else:
