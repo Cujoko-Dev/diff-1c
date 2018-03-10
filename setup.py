@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
-import diff_1c
 from setuptools import setup
+
+import diff_1c
 
 setup(
     name='diff_1c',
@@ -35,10 +36,11 @@ setup(
     keywords='1c diff v8reader v8unpack gcomp',
 
     install_requires=[
-        'appdirs',
-        'parse-1c-build',
-        'PyYAML',
-        'yodl'
+        'parse-1c-build'
+    ],
+
+    dependency_links=[
+        'http://github.com/Cujoko/parse-1c-build/tarball/master',
     ],
 
     py_modules=['diff-1c'],
