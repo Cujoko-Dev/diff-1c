@@ -21,12 +21,6 @@ def get_argparser() -> ArgumentParser:
         help='Show version')
 
     parser.add_argument(
-        '--debug',
-        action='store_true',
-        default=False,
-        help='if this option exists then debug mode is enabled')
-
-    parser.add_argument(
         '--tool',
         choices=['KDiff3', 'AraxisMerge', 'WinMerge', 'ExamDiff'],
         default='KDiff3',
@@ -34,7 +28,7 @@ def get_argparser() -> ArgumentParser:
 
     parser.add_argument(
         '--name-format',
-        choices=['TortoiseGit'],
+        choices=['TortoiseGit'],  # fixme
         default='TortoiseGit',
         help='name format')
 
