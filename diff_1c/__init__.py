@@ -9,14 +9,14 @@ from typing import Any
 from commons import get_settings
 from parse_1c_build.parse import Parser
 
-__version__ = '4.1.1'
+__version__ = '4.2.0'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
 
 
 def run(args: Any) -> None:
-    settings = get_settings(APP_NAME, APP_AUTHOR)
+    settings = get_settings(app_name=APP_NAME, app_author=APP_AUTHOR)
 
     exclude_file_names = []
     if 'exclude_files' in settings:

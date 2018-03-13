@@ -36,11 +36,13 @@ setup(
     keywords='1c diff v8reader v8unpack gcomp',
 
     install_requires=[
+        'commons',
         'parse-1c-build'
     ],
 
     dependency_links=[
-        'http://github.com/Cujoko/parse-1c-build/tarball/master',
+        'http://github.com/Cujoko/commons/tarball/master',
+        'http://github.com/Cujoko/parse-1c-build/tarball/master'
     ],
 
     py_modules=['diff-1c'],

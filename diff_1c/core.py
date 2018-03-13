@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from cli import get_argparser
+from diff_1c.cli import get_argparser
 
 
 def run() -> None:
