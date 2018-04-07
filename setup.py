@@ -27,5 +27,5 @@ setup(
             'diff1c=diff_1c.__main__:run'
         ]
     },
-    license = 'MIT'
+    license='MIT'
 )

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from diff_1c import run
 from diff_1c.cli import get_argparser
+from diff_1c.main import run
 
 
 class MainTestCase(unittest.TestCase):
@@ -11,5 +11,4 @@ class MainTestCase(unittest.TestCase):
 
     def test_run(self):
         args = self.parser.parse_args('data/test.epf data/test.epf'.split())
-
         run(args)
