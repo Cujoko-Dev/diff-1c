@@ -9,7 +9,7 @@ from typing import Any
 from commons import SettingsException, get_settings
 from parse_1c_build.parse import Parser
 
-__version__ = '4.2.1'
+__version__ = '4.2.2'
 
 APP_AUTHOR = 'util-1c'
 APP_NAME = 'diff-1c'
