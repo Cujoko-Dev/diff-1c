@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
-from typing import Any
 
 import shutil
 
@@ -13,7 +12,7 @@ from parse_1c_build.parse import Parser
 
 
 class Processor:
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs):
         settings_file_path = Path('settings.yaml')
         if 'settings_file' in kwargs:
             settings_file_path = Path(kwargs['settings_file'])
@@ -144,7 +143,7 @@ class Processor:
             raise Exception('Diff files \'{0}\' and \'{1}\' failed!'.format(str(base_file_path), str(mine_file_path)))
 
 
-def run(args: Any) -> None:
+def run(args):
     processor = Processor()
     # Args
     processor.run(args)

@@ -5,7 +5,7 @@ from diff_1c import __version__
 from diff_1c.main import run
 
 
-def get_argparser() -> ArgumentParser:
+def get_argparser():
     parser = ArgumentParser(prog='diff1c', description='Diff utility for 1C:Enterprise files', add_help=False)
     parser.set_defaults(func=run)
     parser.add_argument(
