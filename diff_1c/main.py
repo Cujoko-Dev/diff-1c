@@ -29,7 +29,7 @@ class Processor:
         base_is_excluded = False
         base_file_path = Path(args.base)
         if args.bname:
-            if args.name_format.lower() == 'TortoiseGit'.lower():
+            if args.name_format.lower() == 'tortoisegit':
                 bname_file_path = Path(args.bname.split(':')[0])
             else:
                 bname_file_path = Path(args.bname.split(':')[0])
@@ -50,7 +50,7 @@ class Processor:
         mine_is_excluded = False
         mine_file_path = Path(args.mine)
         if args.yname:
-            if args.name_format.lower() == 'TortoiseGit'.lower():
+            if args.name_format.lower() == 'tortoisegit':
                 yname_file_path = Path(args.yname.split(':')[0])
             else:
                 yname_file_path = Path(args.yname.split(':')[0])
@@ -68,8 +68,8 @@ class Processor:
         else:
             mine_is_excluded = True
         tool_args = None
-        if args.tool.lower() == 'KDiff3'.lower():
-            tool_file_path = Path(self.settings['KDiff3'])
+        if args.tool.lower() == 'kdiff3':
+            tool_file_path = Path(self.settings['kdiff3'])
             tool_args = [str(tool_file_path)]
             # base
             if base_is_excluded:
@@ -85,8 +85,8 @@ class Processor:
                 tool_args += ['--cs', 'EncodingForB=windows-1251', str(mine_source_dir_path)]
             if args.yname is not None:
                 tool_args += ['--L2', args.yname]
-        elif args.tool.lower() == 'AraxisMerge'.lower():
-            tool_file_path = Path(self.settings['AraxisMerge'])
+        elif args.tool.lower() == 'araxismerge':
+            tool_file_path = Path(self.settings['araxismerge'])
             tool_args = [str(tool_file_path), '/max', '/wait']
             # base
             if base_is_excluded:
@@ -102,8 +102,8 @@ class Processor:
                 tool_args += [str(mine_source_dir_path)]
             if args.yname is not None:
                 tool_args += ['/title2:{}'.format(args.yname)]
-        elif args.tool.lower() == 'WinMerge'.lower():
-            tool_file_path = Path(self.settings['WinMerge'])
+        elif args.tool.lower() == 'winmerge':
+            tool_file_path = Path(self.settings['winmerge'])
             tool_args = [str(tool_file_path), '-e', '-ub']
             # base
             if base_is_excluded:
@@ -119,8 +119,8 @@ class Processor:
                 tool_args += [str(mine_source_dir_path)]
             if args.yname is not None:
                 tool_args += ['-dr', args.yname]
-        elif args.tool.lower() == 'ExamDiff'.lower():
-            tool_file_path = Path(self.settings['ExamDiff'])
+        elif args.tool.lower() == 'examdiff':
+            tool_file_path = Path(self.settings['examdiff'])
             tool_args = [str(tool_file_path)]
             # base
             if base_is_excluded:
