@@ -6,7 +6,7 @@ import tempfile
 
 import shutil
 
-from commons.settings import SettingsException, get_settings
+from commons.settings import SettingsError, get_settings
 from diff_1c import APP_AUTHOR, APP_NAME
 from parse_1c_build.parse import Parser
 
@@ -21,7 +21,7 @@ class Processor:
             self.exclude_file_names = []
         else:
             if 'exclude_files' not in self.settings:
-                raise SettingsException('There is no exclude_files in settings!')
+                raise SettingsError('There is no exclude_files in settings!')
             self.exclude_file_names = self.settings['exclude_files']
 
     def run(self, args):
@@ -137,10 +137,10 @@ class Processor:
             if args.yname is not None:
                 tool_args += ['--right_display_name:{}'.format(args.yname)]
         if tool_args is None:
-            raise Exception('Diff files \'{0}\' and \'{1}\' failed!'.format(str(base_file_path), str(mine_file_path)))
+            raise Exception('Diff files \'{0}\' and \'{1}\' failed'.format(str(base_file_path), str(mine_file_path)))
         exit_code = subprocess.check_call(tool_args)
         if not exit_code == 0:
-            raise Exception('Diff files \'{0}\' and \'{1}\' failed!'.format(str(base_file_path), str(mine_file_path)))
+            raise Exception('Diff files \'{0}\' and \'{1}\' failed'.format(str(base_file_path), str(mine_file_path)))
 
 
 def run(args):
