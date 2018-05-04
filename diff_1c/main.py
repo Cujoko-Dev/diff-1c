@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os
-from pathlib import Path
 import subprocess
 import tempfile
 
 import shutil
 
 from commons.settings import SettingsError, get_settings
+from compat import Path
 from diff_1c import APP_AUTHOR, APP_NAME
 from parse_1c_build.parse import Parser
 
