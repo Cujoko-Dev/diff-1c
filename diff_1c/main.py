@@ -8,8 +8,8 @@ import tempfile
 import shutil
 
 from commons.settings import SettingsError, get_settings
-from compat import Path
 from diff_1c import APP_AUTHOR, APP_NAME
+from diff_1c.compat import Path
 from parse_1c_build.parse import Parser
 
 
