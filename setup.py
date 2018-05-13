@@ -1,6 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from setuptools import find_packages, setup
 
 import diff_1c
