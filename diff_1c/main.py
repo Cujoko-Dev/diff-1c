@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import os
+import shutil
 import subprocess
 import tempfile
-
-import shutil
 
 from commons.compat import Path
 from commons.settings import SettingsError, get_settings
