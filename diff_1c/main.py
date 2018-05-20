@@ -37,9 +37,7 @@ class Processor:
             bname_file_fullname = os.getcwd()
         base_source_dir_fullname = None
         if os.path.basename(bname_file_fullname) not in self.exclude_file_names:
-            base_file_basename = os.path.basename(base_file_fullname)
-            base_file_basename_splitted = base_file_basename.split(os.extsep)
-            base_file_fullname_suffix = base_file_basename_splitted[1] if len(base_file_basename_splitted) > 1 else ''
+            base_file_fullname_suffix = os.path.splitext(base_file_fullname)[1]
             base_temp_file, base_temp_file_fullname = tempfile.mkstemp(base_file_fullname_suffix)
             os.close(base_temp_file)
             shutil.copyfile(base_file_fullname, base_temp_file_fullname)
@@ -60,9 +58,7 @@ class Processor:
             yname_file_fullname = os.getcwd()
         mine_source_dir_fullname = None
         if os.path.basename(yname_file_fullname) not in self.exclude_file_names:
-            mine_file_basename = os.path.basename(mine_file_fullname)
-            mine_file_basename_splitted = mine_file_basename.split(os.extsep)
-            mine_file_fullname_suffix = mine_file_basename_splitted[1] if len(mine_file_basename_splitted) > 1 else ''
+            mine_file_fullname_suffix = os.path.splitext(mine_file_fullname)[1]
             mine_temp_file, mine_temp_file_fullname = tempfile.mkstemp(mine_file_fullname_suffix)
             os.close(mine_temp_file)
             shutil.copyfile(mine_file_fullname, mine_temp_file_fullname)
