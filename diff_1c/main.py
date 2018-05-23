@@ -6,12 +6,13 @@ import shutil
 import subprocess
 import tempfile
 
+from commons.compat import u
 from commons.settings import SettingsError, get_settings
 from diff_1c import APP_AUTHOR, APP_NAME
 from parse_1c_build.parse import Parser
 
 
-class Processor:
+class Processor(object):
     def __init__(self, **kwargs):
         settings_file_name = 'settings.yaml'
         if 'settings_file' in kwargs:
@@ -39,9 +40,10 @@ class Processor:
         if os.path.basename(bname_file_fullname) not in self.exclude_file_names:
             base_file_fullname_suffix = os.path.splitext(base_file_fullname)[1]
             base_temp_file, base_temp_file_fullname = tempfile.mkstemp(base_file_fullname_suffix)
+            base_temp_file_fullname = u(base_temp_file_fullname)
             os.close(base_temp_file)
             shutil.copyfile(base_file_fullname, base_temp_file_fullname)
-            base_source_dir_fullname = tempfile.mkdtemp()
+            base_source_dir_fullname = u(tempfile.mkdtemp())
             Parser().run(base_temp_file_fullname, base_source_dir_fullname)
             os.remove(base_temp_file_fullname)
         else:
@@ -60,9 +62,10 @@ class Processor:
         if os.path.basename(yname_file_fullname) not in self.exclude_file_names:
             mine_file_fullname_suffix = os.path.splitext(mine_file_fullname)[1]
             mine_temp_file, mine_temp_file_fullname = tempfile.mkstemp(mine_file_fullname_suffix)
+            mine_temp_file_fullname = u(mine_temp_file_fullname)
             os.close(mine_temp_file)
             shutil.copyfile(mine_file_fullname, mine_temp_file_fullname)
-            mine_source_dir_fullname = tempfile.mkdtemp()
+            mine_source_dir_fullname = u(tempfile.mkdtemp())
             Parser().run(mine_temp_file_fullname, mine_source_dir_fullname)
             os.remove(mine_temp_file_fullname)
         else:
