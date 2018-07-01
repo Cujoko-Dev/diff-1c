@@ -28,50 +28,50 @@ class Processor(object):
     def run(self, args):
         # base
         base_is_excluded = False
-        base_file_fullname = args.base
-        if args.bname:
-            if args.name_format.lower() == 'tortoisegit':
-                bname_file_fullname = args.bname.split(':')[0]
+        base_file_fullname = u(args.base, encoding='cp1251')
+        if u(args.bname, encoding='cp1251'):
+            if u(args.name_format, encoding='cp1251').lower() == 'tortoisegit':
+                bname_file_fullname = u(args.bname, encoding='cp1251').split(':')[0]
             else:
-                bname_file_fullname = args.bname.split(':')[0]
+                bname_file_fullname = u(args.bname, encoding='cp1251').split(':')[0]
         else:
             bname_file_fullname = os.getcwd()
         base_source_dir_fullname = None
         if os.path.basename(bname_file_fullname) not in self.exclude_file_names:
             base_file_fullname_suffix = os.path.splitext(base_file_fullname)[1]
             base_temp_file, base_temp_file_fullname = tempfile.mkstemp(base_file_fullname_suffix)
-            base_temp_file_fullname = u(base_temp_file_fullname)
+            base_temp_file_fullname = u(base_temp_file_fullname, encoding='cp1251')
             os.close(base_temp_file)
             shutil.copyfile(base_file_fullname, base_temp_file_fullname)
-            base_source_dir_fullname = u(tempfile.mkdtemp())
+            base_source_dir_fullname = u(tempfile.mkdtemp(), encoding='cp1251')
             Parser().run(base_temp_file_fullname, base_source_dir_fullname)
             os.remove(base_temp_file_fullname)
         else:
             base_is_excluded = True
         # mine
         mine_is_excluded = False
-        mine_file_fullname = args.mine
-        if args.yname:
-            if args.name_format.lower() == 'tortoisegit':
-                yname_file_fullname = args.yname.split(':')[0]
+        mine_file_fullname = u(args.mine, encoding='cp1251')
+        if u(args.yname, encoding='cp1251'):
+            if u(args.name_format, encoding='cp1251').lower() == 'tortoisegit':
+                yname_file_fullname = u(args.yname, encoding='cp1251').split(':')[0]
             else:
-                yname_file_fullname = args.yname.split(':')[0]
+                yname_file_fullname = u(args.yname, encoding='cp1251').split(':')[0]
         else:
             yname_file_fullname = os.getcwd()
         mine_source_dir_fullname = None
         if os.path.basename(yname_file_fullname) not in self.exclude_file_names:
             mine_file_fullname_suffix = os.path.splitext(mine_file_fullname)[1]
             mine_temp_file, mine_temp_file_fullname = tempfile.mkstemp(mine_file_fullname_suffix)
-            mine_temp_file_fullname = u(mine_temp_file_fullname)
+            mine_temp_file_fullname = u(mine_temp_file_fullname, encoding='cp1251')
             os.close(mine_temp_file)
             shutil.copyfile(mine_file_fullname, mine_temp_file_fullname)
-            mine_source_dir_fullname = u(tempfile.mkdtemp())
+            mine_source_dir_fullname = u(tempfile.mkdtemp(), encoding='cp1251')
             Parser().run(mine_temp_file_fullname, mine_source_dir_fullname)
             os.remove(mine_temp_file_fullname)
         else:
             mine_is_excluded = True
         tool_args = None
-        if args.tool.lower() == 'kdiff3':
+        if u(args.tool, encoding='cp1251').lower() == 'kdiff3':
             tool_file_fullname = self.settings['kdiff3']
             tool_args = [tool_file_fullname]
             # base
@@ -79,16 +79,16 @@ class Processor(object):
                 tool_args += ['--cs', 'EncodingForA=UTF-8', base_file_fullname]
             else:
                 tool_args += ['--cs', 'EncodingForA=windows-1251', base_source_dir_fullname]
-            if args.bname is not None:
-                tool_args += ['--L1', args.bname]
+            if u(args.bname, encoding='cp1251') is not None:
+                tool_args += ['--L1', u(args.bname, encoding='cp1251')]
             # mine
             if mine_is_excluded:
                 tool_args += ['--cs', 'EncodingForB=UTF-8', mine_file_fullname]
             else:
                 tool_args += ['--cs', 'EncodingForB=windows-1251', mine_source_dir_fullname]
-            if args.yname is not None:
-                tool_args += ['--L2', args.yname]
-        elif args.tool.lower() == 'araxismerge':
+            if u(args.yname, encoding='cp1251') is not None:
+                tool_args += ['--L2', u(args.yname, encoding='cp1251')]
+        elif u(args.tool, encoding='cp1251').lower() == 'araxismerge':
             tool_file_fullname = self.settings['araxismerge']
             tool_args = [tool_file_fullname, '/max', '/wait']
             # base
@@ -96,16 +96,16 @@ class Processor(object):
                 tool_args += [base_file_fullname]
             else:
                 tool_args += [base_source_dir_fullname]
-            if args.bname is not None:
-                tool_args += ['/title1:{}'.format(args.bname)]
+            if u(args.bname, encoding='cp1251') is not None:
+                tool_args += ['/title1:{}'.format(u(args.bname, encoding='cp1251'))]
             # mine
             if mine_is_excluded:
                 tool_args += [mine_file_fullname]
             else:
                 tool_args += [mine_source_dir_fullname]
-            if args.yname is not None:
-                tool_args += ['/title2:{}'.format(args.yname)]
-        elif args.tool.lower() == 'winmerge':
+            if u(args.yname, encoding='cp1251') is not None:
+                tool_args += ['/title2:{}'.format(u(args.yname, encoding='cp1251'))]
+        elif u(args.tool, encoding='cp1251').lower() == 'winmerge':
             tool_file_fullname = self.settings['winmerge']
             tool_args = [tool_file_fullname, '-e', '-ub']
             # base
@@ -113,16 +113,16 @@ class Processor(object):
                 tool_args += [base_file_fullname]
             else:
                 tool_args += [base_source_dir_fullname]
-            if args.bname is not None:
-                tool_args += ['-dl', args.bname]
+            if u(args.bname, encoding='cp1251') is not None:
+                tool_args += ['-dl', u(args.bname, encoding='cp1251')]
             # mine
             if mine_is_excluded:
                 tool_args += [mine_file_fullname]
             else:
                 tool_args += [mine_source_dir_fullname]
-            if args.yname is not None:
-                tool_args += ['-dr', args.yname]
-        elif args.tool.lower() == 'examdiff':
+            if u(args.yname, encoding='cp1251') is not None:
+                tool_args += ['-dr', u(args.yname, encoding='cp1251')]
+        elif u(args.tool, encoding='cp1251').lower() == 'examdiff':
             tool_file_fullname = self.settings['examdiff']
             tool_args = [tool_file_fullname]
             # base
@@ -130,15 +130,15 @@ class Processor(object):
                 tool_args += [base_file_fullname]
             else:
                 tool_args += [base_source_dir_fullname]
-            if args.bname is not None:
-                tool_args += ['--left_display_name:{}'.format(args.bname)]
+            if u(args.bname, encoding='cp1251') is not None:
+                tool_args += ['--left_display_name:{}'.format(u(args.bname, encoding='cp1251'))]
             # mine
             if mine_is_excluded:
                 tool_args += [mine_file_fullname]
             else:
                 tool_args += [mine_source_dir_fullname]
-            if args.yname is not None:
-                tool_args += ['--right_display_name:{}'.format(args.yname)]
+            if u(args.yname, encoding='cp1251') is not None:
+                tool_args += ['--right_display_name:{}'.format(u(args.yname, encoding='cp1251'))]
         if tool_args is None:
             raise Exception('Diff files \'{0}\' and \'{1}\' failed'.format(base_file_fullname, mine_file_fullname))
         exit_code = subprocess.check_call(tool_args)
