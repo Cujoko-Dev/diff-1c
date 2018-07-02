@@ -72,7 +72,7 @@ class Processor(object):
             mine_is_excluded = True
         tool_args = None
         if u(args.tool, encoding='cp1251').lower() == 'kdiff3':
-            tool_file_fullname = self.settings['kdiff3']
+            tool_file_fullname = self.settings['kdiff3_file']
             tool_args = [tool_file_fullname]
             # base
             if base_is_excluded:
@@ -89,7 +89,7 @@ class Processor(object):
             if u(args.yname, encoding='cp1251') is not None:
                 tool_args += ['--L2', u(args.yname, encoding='cp1251')]
         elif u(args.tool, encoding='cp1251').lower() == 'araxismerge':
-            tool_file_fullname = self.settings['araxismerge']
+            tool_file_fullname = self.settings['araxismerge_file']
             tool_args = [tool_file_fullname, '/max', '/wait']
             # base
             if base_is_excluded:
@@ -106,7 +106,7 @@ class Processor(object):
             if u(args.yname, encoding='cp1251') is not None:
                 tool_args += ['/title2:{}'.format(u(args.yname, encoding='cp1251'))]
         elif u(args.tool, encoding='cp1251').lower() == 'winmerge':
-            tool_file_fullname = self.settings['winmerge']
+            tool_file_fullname = self.settings['winmerge_file']
             tool_args = [tool_file_fullname, '-e', '-ub']
             # base
             if base_is_excluded:
@@ -123,7 +123,7 @@ class Processor(object):
             if u(args.yname, encoding='cp1251') is not None:
                 tool_args += ['-dr', u(args.yname, encoding='cp1251')]
         elif u(args.tool, encoding='cp1251').lower() == 'examdiff':
-            tool_file_fullname = self.settings['examdiff']
+            tool_file_fullname = self.settings['examdiff_file']
             tool_args = [tool_file_fullname]
             # base
             if base_is_excluded:
