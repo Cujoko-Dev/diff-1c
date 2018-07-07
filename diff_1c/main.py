@@ -6,7 +6,7 @@ import shutil
 import subprocess
 import tempfile
 
-from commons.compat import u
+from commons.compat import s, u
 from commons.settings import SettingsError, get_settings
 from diff_1c import APP_AUTHOR, APP_NAME
 from parse_1c_build.parse import Parser
@@ -141,7 +141,7 @@ class Processor(object):
                 tool_args += ['--right_display_name:{}'.format(u(args.yname, encoding='cp1251'))]
         if tool_args is None:
             raise Exception('Diff files \'{0}\' and \'{1}\' failed'.format(base_file_fullname, mine_file_fullname))
-        exit_code = subprocess.check_call(tool_args)
+        exit_code = subprocess.check_call(s(tool_args, encoding='cp1251'))
         if not exit_code == 0:
             raise Exception('Diff files \'{0}\' and \'{1}\' failed'.format(base_file_fullname, mine_file_fullname))
 
