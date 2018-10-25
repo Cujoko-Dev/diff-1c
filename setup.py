@@ -11,7 +11,7 @@ setup(
     description='Diff utility for 1C:Enterprise',
     author='Cujoko',
     author_email='cujoko@gmail.com',
-    url='https://github.com/Cujoko/diff-1c',
+    url='https://gitlab.com/Cujoko/diff-1c',
     packages=find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',
