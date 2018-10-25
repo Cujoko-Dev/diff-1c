@@ -1,5 +1,5 @@
-araxismerge: ''
-examdiff: ''
+araxismerge_file: ''
+examdiff_file: ''
 exclude_files: []
-kdiff3: c:\Program Files\KDiff3\kdiff3.exe
-winmerge: ''
+kdiff3_file: c:\Program Files\KDiff3\kdiff3.exe
+winmerge_file: ''
