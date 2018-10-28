@@ -22,10 +22,12 @@ def get_argparser():
         help='Show version'
     )
     parser.add_argument(
-        '--tool',
-        choices=['KDiff3', 'AraxisMerge', 'WinMerge', 'ExamDiff'],
-        default='KDiff3',
-        help='external diff program'
+        '--bname',
+        help='the window title for the base file'
+    )
+    parser.add_argument(
+        '--yname',
+        help='the window title for your file'
     )
     parser.add_argument(
         '--name-format',
@@ -34,12 +36,10 @@ def get_argparser():
         help='name format'
     )
     parser.add_argument(
-        '--bname',
-        help='the window title for the base file'
-    )
-    parser.add_argument(
-        '--yname',
-        help='the window title for your file'
+        '--tool',
+        choices=['KDiff3', 'AraxisMerge', 'WinMerge', 'ExamDiff'],
+        default='KDiff3',
+        help='external diff program'
     )
     parser.add_argument(
         'base',

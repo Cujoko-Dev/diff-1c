@@ -25,15 +25,14 @@ class Processor(object):
                 raise SettingsError('There is no exclude_files in settings!')
             self.exclude_file_names = self.settings['exclude_files']
 
-    def run(self, args):
+    def run(self, base_file_fullname, mine_file_fullname, bname='', yname='', name_format='tortoisegit', tool='kdiff3'):
         # base
         base_is_excluded = False
-        base_file_fullname = u(args.base, 'cp1251')
-        if u(args.bname, 'cp1251'):
-            if u(args.name_format, 'cp1251').lower() == 'tortoisegit':
-                bname_file_fullname = u(args.bname, 'cp1251').split(':')[0]
+        if bname:
+            if name_format.lower() == 'tortoisegit':
+                bname_file_fullname = bname.split(':')[0]
             else:
-                bname_file_fullname = u(args.bname, 'cp1251').split(':')[0]
+                bname_file_fullname = bname.split(':')[0]
         else:
             bname_file_fullname = os.getcwd()
         base_source_dir_fullname = None
@@ -50,12 +49,11 @@ class Processor(object):
             base_is_excluded = True
         # mine
         mine_is_excluded = False
-        mine_file_fullname = u(args.mine, 'cp1251')
-        if u(args.yname, 'cp1251'):
-            if u(args.name_format, 'cp1251').lower() == 'tortoisegit':
-                yname_file_fullname = u(args.yname, 'cp1251').split(':')[0]
+        if yname:
+            if name_format.lower() == 'tortoisegit':
+                yname_file_fullname = yname.split(':')[0]
             else:
-                yname_file_fullname = u(args.yname, 'cp1251').split(':')[0]
+                yname_file_fullname = yname.split(':')[0]
         else:
             yname_file_fullname = os.getcwd()
         mine_source_dir_fullname = None
@@ -71,7 +69,7 @@ class Processor(object):
         else:
             mine_is_excluded = True
         tool_args = None
-        if u(args.tool, 'cp1251').lower() == 'kdiff3':
+        if tool.lower() == 'kdiff3':
             tool_file_fullname = self.settings['kdiff3_file']
             tool_args = [tool_file_fullname]
             # base
@@ -79,16 +77,16 @@ class Processor(object):
                 tool_args += ['--cs', 'EncodingForA=UTF-8', base_file_fullname]
             else:
                 tool_args += ['--cs', 'EncodingForA=windows-1251', base_source_dir_fullname]
-            if u(args.bname, 'cp1251') is not None:
-                tool_args += ['--L1', u(args.bname, 'cp1251')]
+            if bname is not None:
+                tool_args += ['--L1', bname]
             # mine
             if mine_is_excluded:
                 tool_args += ['--cs', 'EncodingForB=UTF-8', mine_file_fullname]
             else:
                 tool_args += ['--cs', 'EncodingForB=windows-1251', mine_source_dir_fullname]
-            if u(args.yname, 'cp1251') is not None:
-                tool_args += ['--L2', u(args.yname, 'cp1251')]
-        elif u(args.tool, 'cp1251').lower() == 'araxismerge':
+            if yname is not None:
+                tool_args += ['--L2', yname]
+        elif tool.lower() == 'araxismerge':
             tool_file_fullname = self.settings['araxismerge_file']
             tool_args = [tool_file_fullname, '/max', '/wait']
             # base
@@ -96,16 +94,16 @@ class Processor(object):
                 tool_args += [base_file_fullname]
             else:
                 tool_args += [base_source_dir_fullname]
-            if u(args.bname, 'cp1251') is not None:
-                tool_args += ['/title1:{}'.format(u(args.bname, 'cp1251'))]
+            if bname is not None:
+                tool_args += ['/title1:{}'.format(bname)]
             # mine
             if mine_is_excluded:
                 tool_args += [mine_file_fullname]
             else:
                 tool_args += [mine_source_dir_fullname]
-            if u(args.yname, 'cp1251') is not None:
-                tool_args += ['/title2:{}'.format(u(args.yname, 'cp1251'))]
-        elif u(args.tool, 'cp1251').lower() == 'winmerge':
+            if yname is not None:
+                tool_args += ['/title2:{}'.format(yname)]
+        elif tool.lower() == 'winmerge':
             tool_file_fullname = self.settings['winmerge_file']
             tool_args = [tool_file_fullname, '-e', '-ub']
             # base
@@ -113,16 +111,16 @@ class Processor(object):
                 tool_args += [base_file_fullname]
             else:
                 tool_args += [base_source_dir_fullname]
-            if u(args.bname, 'cp1251') is not None:
-                tool_args += ['-dl', u(args.bname, 'cp1251')]
+            if bname is not None:
+                tool_args += ['-dl', bname]
             # mine
             if mine_is_excluded:
                 tool_args += [mine_file_fullname]
             else:
                 tool_args += [mine_source_dir_fullname]
-            if u(args.yname, 'cp1251') is not None:
-                tool_args += ['-dr', u(args.yname, 'cp1251')]
-        elif u(args.tool, 'cp1251').lower() == 'examdiff':
+            if yname is not None:
+                tool_args += ['-dr', yname]
+        elif tool.lower() == 'examdiff':
             tool_file_fullname = self.settings['examdiff_file']
             tool_args = [tool_file_fullname]
             # base
@@ -130,15 +128,15 @@ class Processor(object):
                 tool_args += [base_file_fullname]
             else:
                 tool_args += [base_source_dir_fullname]
-            if u(args.bname, 'cp1251') is not None:
-                tool_args += ['--left_display_name:{}'.format(u(args.bname, 'cp1251'))]
+            if bname is not None:
+                tool_args += ['--left_display_name:{}'.format(bname)]
             # mine
             if mine_is_excluded:
                 tool_args += [mine_file_fullname]
             else:
                 tool_args += [mine_source_dir_fullname]
-            if u(args.yname, 'cp1251') is not None:
-                tool_args += ['--right_display_name:{}'.format(u(args.yname, 'cp1251'))]
+            if yname is not None:
+                tool_args += ['--right_display_name:{}'.format(yname)]
         if tool_args is None:
             raise Exception('Diff files \'{0}\' and \'{1}\' failed'.format(base_file_fullname, mine_file_fullname))
         exit_code = subprocess.check_call(s(tool_args, 'cp1251'))
@@ -148,5 +146,13 @@ class Processor(object):
 
 def run(args):
     processor = Processor()
+
     # Args
-    processor.run(args)
+    base_file_fullname = u(args.base, 'cp1251')
+    mine_file_fullname = u(args.mine, 'cp1251')
+    bname = u(args.bname, 'cp1251')
+    yname = u(args.yname, 'cp1251')
+    name_format = u(args.name_format, 'cp1251')
+    tool = u(args.tool, 'cp1251')
+
+    processor.run(base_file_fullname, mine_file_fullname, bname, yname, name_format, tool)
