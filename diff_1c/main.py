@@ -9,7 +9,7 @@ import tempfile
 from commons.compat import s, u
 from commons.settings import SettingsError, get_settings
 from diff_1c import APP_AUTHOR, APP_NAME
-from parse_1c_build.parse import Parser
+from parse_1c_build import Parser
 
 
 class Processor(object):
