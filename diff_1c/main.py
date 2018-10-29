@@ -8,7 +8,7 @@ import tempfile
 
 from commons.compat import s, u
 from commons.settings import SettingsError, get_settings
-from diff_1c import APP_AUTHOR, APP_NAME
+from diff_1c.__about__ import APP_AUTHOR, APP_NAME
 from parse_1c_build import Parser
 
 
