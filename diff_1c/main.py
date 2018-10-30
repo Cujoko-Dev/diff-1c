@@ -148,11 +148,11 @@ def run(args):
     processor = Processor()
 
     # Args
-    base_file_fullname = u(args.base, 'cp1251')
-    mine_file_fullname = u(args.mine, 'cp1251')
-    bname = u(args.bname, 'cp1251')
-    yname = u(args.yname, 'cp1251')
-    name_format = u(args.name_format, 'cp1251')
-    tool = u(args.tool, 'cp1251')
+    base_file_fullname = args.base
+    mine_file_fullname = args.mine
+    bname = args.bname
+    yname = args.yname
+    name_format = args.name_format
+    tool = args.tool
 
     processor.run(base_file_fullname, mine_file_fullname, bname, yname, name_format, tool)
