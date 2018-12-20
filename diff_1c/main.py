@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+import logging
 import os
 import shutil
 import subprocess
@@ -10,6 +11,8 @@ from commons.compat import s, u
 from commons.settings import SettingsError, get_settings
 from diff_1c.__about__ import APP_AUTHOR, APP_NAME
 from parse_1c_build import Parser
+
+logger = logging.getLogger(__name__)
 
 
 class Processor(object):
@@ -145,14 +148,17 @@ class Processor(object):
 
 
 def run(args):
-    processor = Processor()
+    try:
+        processor = Processor()
 
-    # Args
-    base_file_fullname = args.base
-    mine_file_fullname = args.mine
-    bname = args.bname
-    yname = args.yname
-    name_format = args.name_format
-    tool = args.tool
+        # Args
+        base_file_fullname = args.base
+        mine_file_fullname = args.mine
+        bname = args.bname
+        yname = args.yname
+        name_format = args.name_format
+        tool = args.tool
 
-    processor.run(base_file_fullname, mine_file_fullname, bname, yname, name_format, tool)
+        processor.run(base_file_fullname, mine_file_fullname, bname, yname, name_format, tool)
+    except Exception as e:
+        logger.exception(e)

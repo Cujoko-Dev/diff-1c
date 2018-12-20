@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 import sys
 
 from commons.compat import u
-from commons.logging import add_loggers
+from commons.logging_ import add_loggers
 from diff_1c import logger as main_logger
 from diff_1c.cli import get_argparser
 

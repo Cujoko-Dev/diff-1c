@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 from argparse import ArgumentParser
 
-from commons.logging import add_logging_arguments
+from commons.logging_ import add_logging_arguments
 from diff_1c import __version__
 from diff_1c.main import run
 
