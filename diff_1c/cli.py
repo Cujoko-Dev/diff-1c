@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 from argparse import ArgumentParser
 
+from commons.logging import add_logging_arguments
 from diff_1c import __version__
 from diff_1c.main import run
 
@@ -21,6 +22,7 @@ def get_argparser():
         version='%(prog)s, ver. {0}'.format(__version__),
         help='Show version'
     )
+    add_logging_arguments(parser)
     parser.add_argument(
         '--bname',
         help='the window title for the base file'
