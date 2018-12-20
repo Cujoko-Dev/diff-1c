@@ -14,6 +14,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="commons-1c" />
     <orderEntry type="module" module-name="parse-1c-build" />
+    <orderEntry type="module" module-name="commons" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />
