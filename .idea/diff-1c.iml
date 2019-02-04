@@ -10,7 +10,7 @@
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/tests/data" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 2.7 (diff-1c)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.7 (diff-1c)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="commons-1c" />
     <orderEntry type="module" module-name="parse-1c-build" />

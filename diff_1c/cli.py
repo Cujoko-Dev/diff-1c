@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 from argparse import ArgumentParser
 
 from commons.logging_ import add_logging_arguments
@@ -8,8 +6,9 @@ from diff_1c import __version__
 from diff_1c.main import run
 
 
-def get_argparser():
-    parser = ArgumentParser(prog='diff1c', description='Diff utility for 1C:Enterprise files', add_help=False)
+def get_argparser() -> ArgumentParser:
+    parser = ArgumentParser(
+        prog='diff1c', description='Diff utility for 1C:Enterprise files', add_help=False)
     parser.set_defaults(func=run)
     parser.add_argument(
         '-h', '--help',
