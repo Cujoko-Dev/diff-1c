@@ -1,12 +1,11 @@
 ﻿# -*- coding: utf-8 -*-
 from pathlib import Path
-from typing import Dict
 
 from setuptools import find_packages, setup
 
 here = Path(__file__).parent
 
-about: Dict[str] = {}
+about = {}
 with Path(here, 'diff_1c', '__about__.py').open() as f:
     exec(f.read(), about)
 

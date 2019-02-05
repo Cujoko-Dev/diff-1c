@@ -11,29 +11,45 @@ from commons.settings import SettingsError, get_settings
 from diff_1c.__about__ import APP_AUTHOR, APP_NAME
 from parse_1c_build import Parser
 
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Processor(object):
     def __init__(self, **kwargs):
-        settings_file_path = Path('settings.yaml')
-        if 'settings_file_path' in kwargs:
-            settings_file_path = Path(kwargs['settings_file_path'])
+        settings_file_path = kwargs.get('settings_file_path', Path('settings.yaml'))
+        if not isinstance(settings_file_path, Path):
+            raise SettingsError('Argument "Settings File Path" Incorrect')
         self.settings = get_settings(settings_file_path, app_name=APP_NAME, app_author=APP_AUTHOR)
-        if 'exclude_names' in kwargs:
-            self.exclude_file_names = []
-        else:
-            if 'exclude_names' not in self.settings:
-                raise SettingsError('There is no exclude_files in settings!')
-            self.exclude_file_names = self.settings['exclude_files']
 
-    def run(
-            self, base_file_fullpath: Path, mine_file_fullpath: Path, bname: str = '', yname: str = '',
-            name_format: str = 'tortoisegit', tool: str = 'kdiff3') -> None:
+        self.tool = kwargs.get('tool', self.settings.get('default_tool', 'kdiff3'))
+        if not self.tool:
+            raise SettingsError('Tool Undefined')
+        if not isinstance(self.tool, str):
+            raise SettingsError('Argument "Tool" Incorrect')
+        self.tool = self.tool.lower()
+        if not self.tool in self.settings['tools']:
+            raise SettingsError('Tool Incorrect')
+
+        self.tool_path = Path(self.settings['tools'][self.tool])
+        if not self.tool_path.is_file():
+            raise SettingsError('Tool Not Exists')
+
+        self.exclude_file_names = kwargs.get('exclude_file_names', self.settings.get('exclude_file_names', []))
+        if not isinstance(self.exclude_file_names, list):
+            raise SettingsError('Argument "Exclude File Names" Incorrect')
+
+        self.name_format = kwargs.get('name_format', self.settings.get('name_format', 'tortoisegit'))
+        if not self.name_format:
+            raise SettingsError('Name Format Undefined')
+        if not isinstance(self.name_format, str):
+            raise SettingsError('Argument "Name Format" Incorrect')
+        self.name_format = self.name_format.lower()
+
+    def run(self, base_file_fullpath: Path, mine_file_fullpath: Path, bname: str = '', yname: str = '') -> None:
         # base
         base_is_excluded = False
         if bname:
-            if name_format.lower() == 'tortoisegit':
+            if self.name_format == 'tortoisegit':
                 bname_file_fullpath = Path(bname.split(':')[0])
             else:
                 bname_file_fullpath = Path(bname.split(':')[0])
@@ -50,10 +66,11 @@ class Processor(object):
             Path(base_temp_file_fullname).unlink()
         else:
             base_is_excluded = True
+
         # mine
         mine_is_excluded = False
         if yname:
-            if name_format.lower() == 'tortoisegit':
+            if self.name_format == 'tortoisegit':
                 yname_file_fullpath = Path(yname.split(':')[0])
             else:
                 yname_file_fullpath = Path(yname.split(':')[0])
@@ -70,77 +87,24 @@ class Processor(object):
             Path(mine_temp_file_fullname).unlink()
         else:
             mine_is_excluded = True
-        tool_args = None
-        if tool.lower() == 'kdiff3':
-            tool_file_fullpath = Path(self.settings['kdiff3_file_path'])
-            tool_args = [tool_file_fullpath]
+
+        tool_args = [str(self.tool_path)]
+        if self.tool == 'kdiff3':
             # base
             if base_is_excluded:
-                tool_args += ['--cs', 'EncodingForA=UTF-8', base_file_fullpath]
+                tool_args += ['--cs', 'EncodingForA=UTF-8', str(base_file_fullpath)]
             else:
-                tool_args += ['--cs', 'EncodingForA=windows-1251', base_source_dir_fullpath]
+                tool_args += ['--cs', 'EncodingForA=windows-1251', str(base_source_dir_fullpath)]
             if bname is not None:
                 tool_args += ['--L1', bname]
+
             # mine
             if mine_is_excluded:
-                tool_args += ['--cs', 'EncodingForB=UTF-8', mine_file_fullpath]
+                tool_args += ['--cs', 'EncodingForB=UTF-8', str(mine_file_fullpath)]
             else:
-                tool_args += ['--cs', 'EncodingForB=windows-1251', mine_source_dir_fullpath]
+                tool_args += ['--cs', 'EncodingForB=windows-1251', str(mine_source_dir_fullpath)]
             if yname is not None:
                 tool_args += ['--L2', yname]
-        elif tool.lower() == 'araxismerge':
-            tool_file_fullpath = Path(self.settings['araxismerge_file_path'])
-            tool_args = [tool_file_fullpath, '/max', '/wait']
-            # base
-            if base_is_excluded:
-                tool_args += [base_file_fullpath]
-            else:
-                tool_args += [base_source_dir_fullpath]
-            if bname is not None:
-                tool_args += ['/title1:{}'.format(bname)]
-            # mine
-            if mine_is_excluded:
-                tool_args += [mine_file_fullpath]
-            else:
-                tool_args += [mine_source_dir_fullpath]
-            if yname is not None:
-                tool_args += ['/title2:{}'.format(yname)]
-        elif tool.lower() == 'winmerge':
-            tool_file_fullpath = Path(self.settings['winmerge_file_path'])
-            tool_args = [tool_file_fullpath, '-e', '-ub']
-            # base
-            if base_is_excluded:
-                tool_args += [base_file_fullpath]
-            else:
-                tool_args += [base_source_dir_fullpath]
-            if bname is not None:
-                tool_args += ['-dl', bname]
-            # mine
-            if mine_is_excluded:
-                tool_args += [mine_file_fullpath]
-            else:
-                tool_args += [mine_source_dir_fullpath]
-            if yname is not None:
-                tool_args += ['-dr', yname]
-        elif tool.lower() == 'examdiff':
-            tool_file_fullpath = Path(self.settings['examdiff_file_path'])
-            tool_args = [tool_file_fullpath]
-            # base
-            if base_is_excluded:
-                tool_args += [base_file_fullpath]
-            else:
-                tool_args += [base_source_dir_fullpath]
-            if bname is not None:
-                tool_args += ['--left_display_name:{}'.format(bname)]
-            # mine
-            if mine_is_excluded:
-                tool_args += [mine_file_fullpath]
-            else:
-                tool_args += [mine_source_dir_fullpath]
-            if yname is not None:
-                tool_args += ['--right_display_name:{}'.format(yname)]
-        if tool_args is None:
-            raise Exception('Diff files \'{0}\' and \'{1}\' failed'.format(base_file_fullpath, mine_file_fullpath))
         exit_code = subprocess.check_call(tool_args)
         if not exit_code == 0:
             raise Exception('Diff files \'{0}\' and \'{1}\' failed'.format(base_file_fullpath, mine_file_fullpath))
@@ -148,16 +112,13 @@ class Processor(object):
 
 def run(args) -> None:
     try:
-        processor = Processor()
+        processor = Processor(name_format=args.name_format, tool=args.tool)
 
-        # Args
         base_file_fullpath = Path(args.base)
         mine_file_fullpath = Path(args.mine)
         bname = args.bname
         yname = args.yname
-        name_format = args.name_format
-        tool = args.tool
 
-        processor.run(base_file_fullpath, mine_file_fullpath, bname, yname, name_format, tool)
+        processor.run(base_file_fullpath, mine_file_fullpath, bname, yname)
     except Exception as e:
         logger.exception(e)

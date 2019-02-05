@@ -8,4 +8,4 @@ from diff_1c.main import Processor
 
 # noinspection PyUnresolvedReferences
 logging.getLogger().setLevel(logging.DEBUG)
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
