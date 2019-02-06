@@ -7,7 +7,7 @@ import tempfile
 
 import shutil
 
-from commons.settings import SettingsError, get_path_attribute, get_settings
+from commons.settings import SettingsError, get_attribute, get_path_attribute, get_settings
 from diff_1c.__about__ import APP_AUTHOR, APP_NAME
 from parse_1c_build import Parser
 
@@ -17,15 +17,10 @@ logger = logging.getLogger(__name__)
 class Processor(object):
     def __init__(self, **kwargs):
         settings_file_path = get_path_attribute(
-            kwargs, 'settings_file_path', default_path=Path('settings.yaml'), is_dir=False)
+            kwargs, 'settings_file_path', default_path=Path('settings.yaml'), is_dir=False, check_if_exists=False)
         self.settings = get_settings(settings_file_path, app_name=APP_NAME, app_author=APP_AUTHOR)
 
-        self.tool = kwargs.get('tool', self.settings.get('default_tool', 'kdiff3'))
-        if not self.tool:
-            raise SettingsError('Tool Undefined')
-        if not isinstance(self.tool, str):
-            raise SettingsError('Argument "Tool" Incorrect')
-        self.tool = self.tool.lower()
+        self.tool = get_attribute(kwargs, 'tool', self.settings, 'default_tool', 'kdiff3').lower()
         if not self.tool in self.settings['tools']:
             raise SettingsError('Tool Incorrect')
 
@@ -33,16 +28,8 @@ class Processor(object):
         if not self.tool_path.is_file():
             raise SettingsError('Tool Not Exists')
 
-        self.exclude_file_names = kwargs.get('exclude_file_names', self.settings.get('exclude_file_names', []))
-        if not isinstance(self.exclude_file_names, list):
-            raise SettingsError('Argument "Exclude File Names" Incorrect')
-
-        self.name_format = kwargs.get('name_format', self.settings.get('name_format', 'tortoisegit'))
-        if not self.name_format:
-            raise SettingsError('Name Format Undefined')
-        if not isinstance(self.name_format, str):
-            raise SettingsError('Argument "Name Format" Incorrect')
-        self.name_format = self.name_format.lower()
+        self.exclude_file_names = get_attribute(kwargs, 'exclude_file_names', self.settings, 'exclude_file_names', [])
+        self.name_format = get_attribute(kwargs, 'name_format', self.settings, 'name_format', 'tortoisegit').lower()
 
     def run(self, base_file_fullpath: Path, mine_file_fullpath: Path, bname: str = '', yname: str = '') -> None:
         # base
