@@ -7,7 +7,7 @@ import tempfile
 
 import shutil
 
-from commons.settings import SettingsError, get_settings
+from commons.settings import SettingsError, get_path_attribute, get_settings
 from diff_1c.__about__ import APP_AUTHOR, APP_NAME
 from parse_1c_build import Parser
 
@@ -16,9 +16,8 @@ logger = logging.getLogger(__name__)
 
 class Processor(object):
     def __init__(self, **kwargs):
-        settings_file_path = kwargs.get('settings_file_path', Path('settings.yaml'))
-        if not isinstance(settings_file_path, Path):
-            raise SettingsError('Argument "Settings File Path" Incorrect')
+        settings_file_path = get_path_attribute(
+            kwargs, 'settings_file_path', default_path=Path('settings.yaml'), is_dir=False)
         self.settings = get_settings(settings_file_path, app_name=APP_NAME, app_author=APP_AUTHOR)
 
         self.tool = kwargs.get('tool', self.settings.get('default_tool', 'kdiff3'))
