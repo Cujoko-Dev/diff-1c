@@ -21,7 +21,7 @@ class Processor(object):
         self.settings = get_settings(settings_file_path, app_name=APP_NAME, app_author=APP_AUTHOR)
 
         self.tool = get_attribute(kwargs, 'tool', self.settings, 'default_tool', 'kdiff3').lower()
-        if not self.tool in self.settings['tools']:
+        if self.tool not in self.settings['tools']:
             raise SettingsError('Tool Incorrect')
 
         self.tool_path = Path(self.settings['tools'][self.tool])
