@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from argparse import ArgumentParser
 
-from cjk_commons.logging_ import add_logging_arguments
 from diff_1c import __version__
 from diff_1c.main import run
 
@@ -21,7 +20,6 @@ def get_argparser() -> ArgumentParser:
         version='%(prog)s, ver. {0}'.format(__version__),
         help='Show version'
     )
-    add_logging_arguments(parser)
     parser.add_argument(
         '--bname',
         help='the window title for the base file'

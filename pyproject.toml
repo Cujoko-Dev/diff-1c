@@ -24,6 +24,7 @@ diff1c = "diff_1c.__main__:run"
 python = "^3.7"
 cjk-commons = "^3.3"
 parse-1c-build = "^5.5"
+loguru = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.4"
