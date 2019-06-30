@@ -99,7 +99,7 @@ class Processor:
 def run(args) -> None:
     logger.enable('cjk-commons')
     logger.enable('parse-1c-build')
-    logger.enable('diff-1c')
+    logger.enable(__name__)
     try:
         processor = Processor(name_format=args.name_format, tool=args.tool)
 
