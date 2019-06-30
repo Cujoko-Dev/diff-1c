@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from argparse import ArgumentParser
 
+from cjk_commons.logging_ import add_logging_arguments
 from diff_1c import __version__
 from diff_1c.main import run
 
@@ -48,4 +49,5 @@ def get_argparser() -> ArgumentParser:
         'mine',
         help='your own file, with your changes'
     )
+    add_logging_arguments(parser)
     return parser
