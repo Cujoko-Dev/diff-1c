@@ -8,7 +8,7 @@ from loguru import logger
 import shutil
 
 from cjk_commons.settings import SettingsError, get_attribute, get_path_attribute, get_settings
-from diff_1c import APP_AUTHOR, APP_NAME
+from diff_1c.__about__ import APP_AUTHOR, APP_NAME
 from parse_1c_build import Parser
 
 logger.disable(__name__)

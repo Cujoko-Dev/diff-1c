@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "diff-1c"
-version = "6.4.1"
+version = "6.4.2"
 description = "Diff utility for 1C:Enterprise"
 authors = ["Cujoko <cujoko@gmail.com>"]
 license = "MIT"
