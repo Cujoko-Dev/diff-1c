@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "diff-1c"
-version = "6.4.3"
+version = "6.4.4"
 description = "Diff utility for 1C:Enterprise"
 authors = ["Cujoko <cujoko@gmail.com>"]
 license = "MIT"
@@ -24,7 +24,7 @@ diff1c = "diff_1c.__main__:run"
 python = "^3.7"
 cjk-commons = "^3.5"
 parse-1c-build = "^5.11"
-loguru = "^0.4.0"
+loguru = "^0.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.3"
