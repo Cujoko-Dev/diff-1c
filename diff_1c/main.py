@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 from pathlib import Path
+import shutil
 import subprocess
+import sys
 import tempfile
 
 from loguru import logger
-import shutil
 
 from cjk_commons.settings import SettingsError, get_attribute, get_path_attribute, get_settings
 from diff_1c.__about__ import APP_AUTHOR, APP_NAME
@@ -111,3 +112,4 @@ def run(args) -> None:
         processor.run(base_file_fullpath, mine_file_fullpath, bname, yname)
     except Exception as e:
         logger.exception(e)
+        sys.exit(1)
