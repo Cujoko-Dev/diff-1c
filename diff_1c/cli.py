@@ -18,7 +18,7 @@ def get_argparser() -> ArgumentParser:
     parser.add_argument(
         '-v', '--version',
         action='version',
-        version='%(prog)s, ver. {0}'.format(__version__),
+        version=f'%(prog)s, ver. {__version__}',
         help='Show version'
     )
     parser.add_argument(

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
-from pathlib import Path
 import shutil
 import subprocess
-import sys
 import tempfile
+from pathlib import Path
 
+import sys
 from loguru import logger
 
 from cjk_commons.settings import SettingsError, get_attribute, get_path_attribute, get_settings
@@ -94,7 +94,7 @@ class Processor:
                 tool_args += ['--L2', yname]
         exit_code = subprocess.check_call(tool_args)
         if not exit_code == 0:
-            raise Exception('Diff files \'{0}\' and \'{1}\' failed'.format(base_file_fullpath, mine_file_fullpath))
+            raise Exception(f'Diff files \'{base_file_fullpath}\' and \'{mine_file_fullpath}\' failed')
 
 
 def run(args) -> None:
