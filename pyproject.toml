@@ -24,9 +24,9 @@ version = "6.6.1"
 diff1c = "diff_1c.__main__:run"
 
 [tool.poetry.dependencies]
-cjk-commons = "^3.6.1"
+cjk-commons = "^3.6.2"
 loguru = "^0.6.0"
-parse-1c-build = "^5.15.0"
+parse-1c-build = "^5.15.1"
 python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]
