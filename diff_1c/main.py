@@ -2,15 +2,16 @@
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
-import sys
+from cjk_commons.settings import (SettingsError, get_attribute,
+                                  get_path_attribute, get_settings)
 from loguru import logger
-
-from cjk_commons.settings import SettingsError, get_attribute, get_path_attribute, get_settings
-from diff_1c.__about__ import APP_AUTHOR, APP_NAME
 from parse_1c_build import Parser
+
+from diff_1c.__about__ import APP_AUTHOR, APP_NAME
 
 logger.disable(__name__)
 

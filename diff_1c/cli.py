@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 
 from cjk_commons.logging_ import add_logging_arguments
+
 from diff_1c import __version__
 from diff_1c.main import run
 

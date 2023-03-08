@@ -2,6 +2,7 @@
 import sys
 
 from cjk_commons.logging_ import add_loggers
+
 from diff_1c import logger
 from diff_1c.cli import get_argparser
 

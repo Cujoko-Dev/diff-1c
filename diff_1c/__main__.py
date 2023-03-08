@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from pathlib import Path
 import sys
+from pathlib import Path
 
 from diff_1c.core import run
 
