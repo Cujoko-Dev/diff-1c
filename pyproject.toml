@@ -1,4 +1,6 @@
-[tool.pdm]
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 authors = [
@@ -15,9 +17,9 @@ classifiers = [
     "Topic :: Utilities"
 ]
 dependencies = [
-    "cjk-commons==3.6.3",
+    "cjk-commons>=3.6.3,<4.0.0",
     "loguru==0.6.0",
-    "parse-1c-build==5.15.2",
+    "parse-1c-build>=5.15.2,<6.0.0",
 ]
 description = "Diff utility for 1C:Enterprise"
 keywords = ["1c", "diff", "v8reader", "v8unpack", "gcomp"]
@@ -25,11 +27,12 @@ license = {text = "MIT"}
 name = "diff-1c"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "6.6.2"
-
-[build-system]
-requires = ["setuptools>=61", "wheel"]
-build-backend = "setuptools.build_meta"
+version = "6.6.3"
 
 [project.scripts]
-diff1c = "diff_1c.__main__:run"
+diff-1c = "diff_1c.__main__:run"
+
+[project.urls]
+repository = "https://github.com/Cujoko-Dev/diff-1c"
+
+[tool.pdm]
