@@ -11,7 +11,6 @@ classifiers = [
     "Natural Language :: Russian",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.9",
     "Topic :: Software Development",
     "Topic :: Utilities"
 ]
