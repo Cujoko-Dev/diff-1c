@@ -15,5 +15,5 @@ def test():
 def test_run(test):
     parser = test
 
-    args = parser.parse_args('data/test.epf data/test.epf'.split())
+    args = parser.parse_args("data/test.epf data/test.epf".split())
     run(args)

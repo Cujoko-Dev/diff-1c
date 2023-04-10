@@ -27,7 +27,7 @@ license = {text = "MIT"}
 name = "diff-1c"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "6.6.5"
+version = "6.6.6"
 
 [project.scripts]
 diff-1c = "diff_1c.__main__:run"
