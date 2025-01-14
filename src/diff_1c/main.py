@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+"""Главная"""
+
+
 import os
 import shutil
 import subprocess
@@ -21,6 +25,8 @@ logger.disable(__name__)
 
 
 class Processor:
+    """Процессор"""
+
     def __init__(self, **kwargs):
         settings_file_path = get_path_attribute(
             kwargs,
@@ -57,6 +63,8 @@ class Processor:
         bname: str = "",
         yname: str = "",
     ) -> None:
+        """Запустить"""
+
         # base
         base_is_excluded = False
         if bname:
@@ -136,6 +144,8 @@ class Processor:
 
 
 def run(args) -> None:
+    """Запустить"""
+
     logger.enable("cjk_commons")
     logger.enable("parse_1c_build")
     logger.enable(__name__)
@@ -149,6 +159,6 @@ def run(args) -> None:
         yname = args.yname
 
         processor.run(base_file_path, mine_file_path, bname, yname)
-    except Exception as e:
-        logger.exception(e)
+    except Exception as exc:
+        logger.exception(exc)
         sys.exit(1)

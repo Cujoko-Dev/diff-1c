@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+"""CLI"""
+
+
 from argparse import ArgumentParser
 
 from cjk_commons.logging_ import add_logging_arguments
@@ -8,6 +12,8 @@ from diff_1c.main import run
 
 
 def get_argparser() -> ArgumentParser:
+    """Получить парсер командной строки"""
+
     parser = ArgumentParser(
         add_help=False,
         description="Diff utility for 1C:Enterprise files",
