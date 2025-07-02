@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import pytest
 
 from diff_1c.cli import get_argparser

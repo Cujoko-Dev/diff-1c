@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-"""Главная"""
-
-
 import os
 import shutil
 import subprocess
@@ -137,7 +132,7 @@ class Processor:
             if yname is not None:
                 tool_args += ["--L2", yname]
         exit_code = subprocess.check_call(tool_args)
-        if not exit_code == 0:
+        if exit_code != 0:
             raise Exception(
                 f"Diff files '{base_file_path}' and '{mine_file_path}' failed"
             )
