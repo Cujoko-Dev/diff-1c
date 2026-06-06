@@ -13,4 +13,24 @@
 - Python 3.7 и выше. Каталоги интерпретатора и скриптов Python должны быть прописаны в переменной окружения Path
 - Пакет [parse-1c-build][1] с необходимыми настройками
 
+## Установка в pipx для локальной разработки
+
+Для рабочего editable-окружения запускай:
+
+```powershell
+.\scripts\install-pipx-editable.ps1
+```
+
+Скрипт выполняет установку приложения из `.dev` и инжектит локальные зависимости в тот же pipx venv:
+
+```powershell
+pipx install --editable --force .\.dev
+pipx runpip diff-1c install --no-deps --no-cache-dir --force-reinstall `
+  -e C:\Dev\Python\commons `
+  -e C:\Dev\Python\commons-1c `
+  -e C:\Dev\Python\parse-1c-build
+```
+
+Локальные зависимости ставятся из корней проектов, а не из их `.dev`: editable-режим тогда смотрит на `src`, а metadata берётся из основного `pyproject.toml`. Флаг `--no-deps` важен, чтобы одна локальная зависимость не переустановила другую обратно в обычном режиме.
+
 [1]: https://github.com/Cujoko/parse-1c-build
