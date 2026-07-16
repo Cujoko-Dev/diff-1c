@@ -21,15 +21,20 @@ dependencies = [
     "parse-1c-build>=5.15.2,<6.0.0",
 ]
 description = "Diff utility for 1C:Enterprise"
+dynamic = ["version"]
 keywords = ["1c", "diff", "v8reader", "v8unpack", "gcomp"]
 license = {text = "MIT"}
 name = "diff-1c"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "6.7.3"
 
 [project.scripts]
 diff-1c = "diff_1c.__main__:run"
 
 [project.urls]
 repository = "https://github.com/Cujoko-Dev/diff-1c"
+
+[tool.pdm.version]
+path = "src/diff_1c/_version.py"
+pattern = '^__version__\s*=\s*"([^"]+)"'
+source = "file"

@@ -1,6 +1,4 @@
-import importlib.metadata
+from diff_1c._version import __version__
 
 APP_AUTHOR = "util-1c"
 APP_NAME = "diff-1c"
-
-__version__ = importlib.metadata.version(str(__package__))

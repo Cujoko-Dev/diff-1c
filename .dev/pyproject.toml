@@ -24,11 +24,11 @@ dependencies = [
     "loguru>=0.6.0",
 ]
 description = "Diff utility for 1C:Enterprise"
+dynamic = ["version"]
 keywords = ["1c", "diff", "v8reader", "v8unpack", "gcomp"]
 license = {text = "MIT"}
 name = "diff-1c"
 requires-python = ">=3.10"
-version = "0.1.0"
 
 [project.scripts]
 diff-1c = "diff_1c.__main__:run"
@@ -50,3 +50,8 @@ dev = [
 
 [tool.pdm.scripts]
 test = { cmd = "pytest", working_dir = ".." }
+
+[tool.pdm.version]
+path = "../src/diff_1c/_version.py"
+pattern = '^__version__\s*=\s*"([^"]+)"'
+source = "file"
