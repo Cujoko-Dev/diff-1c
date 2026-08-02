@@ -26,7 +26,7 @@ keywords = ["1c", "diff", "v8reader", "v8unpack", "gcomp"]
 license = {text = "MIT"}
 name = "diff-1c"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.6"
 
 [project.scripts]
 diff-1c = "diff_1c.__main__:run"
